@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 18:09:29 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/15 18:26:23 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,12 @@ bool    server::HasError(std::vector<std::string> cmdVec) {
 
 void    server::respondToClient(std::vector<std::string> cmdVec, std::map<int, client>::iterator client) {
     std::map<std::string, cmd>::iterator cmd_it;
-    
+
     cmd_it = _cmdMap.find(cmdVec[0]);
-    if (cmd_it != _cmdMap.end())
-        (this->*(cmd_it->second))(cmdVec, client);
-    else
-        std::cerr << "Error: unknown command\n";
+    if (!client->second._isGuest) {
+        if (cmd_it != _cmdMap.end())
+            (this->*(cmd_it->second))(cmdVec, client);
+        else
+            std::cerr << "Error: unknown command\n";
+    }
 }
