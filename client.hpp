@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/13 17:56:59 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/15 09:15:51 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,19 @@ class client {
     std::string		_realname;
 	//channels
     public:
-        bool    _isOpreator;
-        bool    _isGuest;
+        bool            _isOpreator;
+        bool            _isGuest;
+        std::string		_clientBuff;
+        /* Methods */
         client();
-        client(int _socket);
         ~client();
+        client(int _socket);
+        const int&         getsocket();
+        const std::string& getNickname();
+        const std::string& getRealname();
+        const std::string& getUsername();
+        const std::string& getHostname();
+        const std::string& getPasswd();
 };
 
 #endif
