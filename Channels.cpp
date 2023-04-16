@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:11:25 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:40:44 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,15 @@
 
 Channels::Channels() {}
 
-Channels::Channels(std::string name, std::string key, client Owner) {}
+Channels::Channels(std::string name, std::string key, client owner)
+    : _channelName(name), _channelKey(key), _channelOwner(owner) {
+        isProtected = true;
+    }
+
+Channels::Channels(std::string name, client owner)
+    : _channelName(name), _channelOwner(owner) {
+        isProtected = false;
+    }
 
 Channels::~Channels() {}
 
@@ -43,6 +51,14 @@ void    Channels::setTopic(std::string topic) {
     _channelTopic = topic;
 }
 
-const std::map<int , client>&   Channels::getMembers() {
+const std::vector<client>&   Channels::getMembers() {
     return _channelMembers;
+}
+
+void    Channels::addMember(client& client, bool makeOperator) {
+    _channelMembers.push_back(client);
+    if (makeOperator) {
+        client.isOpreator = true;
+        _channelOperators.push_back(client);
+    }
 }
