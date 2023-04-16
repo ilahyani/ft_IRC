@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 22:03:04 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:31:12 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ class client {
     std::string		        _nickname;
     std::string		        _username;
     std::string		        _realname;
-	std::vector<Channels>   _channels;
     public:
         bool            isOpreator;
         bool            isGuest;
