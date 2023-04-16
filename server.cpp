@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 15:00:34 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:26:27 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool server::startServ() {
     _listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (_listenSocket < 0)
         return std::cerr << "Failed to create socket\n", false;
-
     if (setsockopt(_listenSocket, SOL_SOCKET, SO_REUSEADDR, &ov, sizeof(ov)) < 0
         || fcntl(_listenSocket, F_SETFL, O_NONBLOCK) < 0) {
             close (_listenSocket);
@@ -95,7 +94,6 @@ void server::addNewClient() {
 
 void    server::checkConnectedClients() {
     int recvBytes;
-    std::vector<std::string> cmd;
 
     for (size_t i = 1; i < _fdsVec.size(); i++) {
         if (_fdsVec.at(i).revents == POLLIN) {
@@ -103,7 +101,7 @@ void    server::checkConnectedClients() {
             recvBytes = recv(_fdsVec[i].fd, _buff, sizeof(_buff), 0);
             if (recvBytes == -1) {
                 std::cerr << "Unexpected Error! Closing connection with "
-                    << (_connectedClients.at(_fdsVec.at(i).fd)._isGuest ? "guest"
+                    << (_connectedClients.at(_fdsVec.at(i).fd).isGuest ? "guest"
                     : _connectedClients.at(_fdsVec.at(i).fd).getNickname())
                     << std::endl;
                 _connectedClients.erase(_fdsVec.at(i).fd);
@@ -112,7 +110,7 @@ void    server::checkConnectedClients() {
                 i--;
             }
             if (recvBytes == 0) {
-                if (_connectedClients.at(_fdsVec.at(i).fd)._isGuest)
+                if (_connectedClients.at(_fdsVec.at(i).fd).isGuest)
                     std::cout << "Guest client left the server\n";
                 else
                     std::cout << _connectedClients.at(_fdsVec.at(i).fd).getNickname() << " left the server\n";
@@ -121,12 +119,12 @@ void    server::checkConnectedClients() {
                 _fdsVec.erase(_fdsVec.begin() + i);
             }
             else
-                parseReceivedData(i);
+                parseDataAndRespond(i);
         }   
     }
 }
    
-void server::parseReceivedData(size_t pos) {
+void server::parseDataAndRespond(size_t pos) {
     std::vector<std::string>    cmdVec;
     std::string                 msg(_buff);
     size_t                      msgEnd;
@@ -135,17 +133,16 @@ void server::parseReceivedData(size_t pos) {
 
     msgEnd = msg.find_first_of("\r\n");
     if (msgEnd == std::string::npos)
-        _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff += msg;
-    
+        _connectedClients.at(_fdsVec.at(pos).fd).clientBuff += msg;
     else {
-        _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff += msg.substr(0, msgEnd);
-        std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff.c_str());
+        _connectedClients.at(_fdsVec.at(pos).fd).clientBuff += msg.substr(0, msgEnd);
+        std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.c_str());
         token = std::strtok(str, " ");
         while (token != NULL) {
             cmdVec.push_back(token);
             token = std::strtok(NULL, " ");
         }
-        _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff.clear();
+        _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.clear();
         if (!HasError(cmdVec))
             respondToClient(cmdVec, _connectedClients.find(_fdsVec.at(pos).fd));
     }
@@ -164,8 +161,8 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
     if (cmdVec.size() > 0)
         command = (cmdVec[0][0] == ':' ? cmdVec[1] : cmdVec[0]);
     cmd_it = _cmdMap.find(command);
-    if (client->second._loggedIn) {
-        if (!client->second._isGuest) {
+    if (client->second.loggedIn) {
+        if (!client->second.isGuest) {
             if (cmd_it != _cmdMap.end())
                 (this->*(cmd_it->second))(cmdVec, client);
             else
@@ -174,22 +171,22 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
         else {
             if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("nick")) {
                 server::nick(cmdVec, client);
-                client->second._isGuest = false;
+                client->second.isGuest = false;
             }
             else if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("user")){
                 server::user(cmdVec, client);
-                client->second._isGuest = false;
+                client->second.isGuest = false;
             }
             else
-                std::cout << "Please register\n";
+                std::cout << "Please register to the server using NICK and USER commands\n";
         }
     }
     else {
         if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass")) {
-            client->second._loggedIn = true;
+            client->second.loggedIn = true;
             server::pass(cmdVec, client);
         }
         else
-            std::cout << "Please Login to the server\n";
+            std::cout << "Please Login to the server using the PASS command\n";
     }
 }

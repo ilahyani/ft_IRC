@@ -6,14 +6,14 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 22:51:27 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:49:38 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include <string>
+#include "irc.hpp"
 
 class client {
     int				_socket;
@@ -22,12 +22,12 @@ class client {
     std::string		_nickname;
     std::string		_username;
     std::string		_realname;
-	//channels
+	// Channels        _channels;
     public:
-        bool            _isOpreator;
-        bool            _isGuest;
-        bool            _loggedIn;
-        std::string		_clientBuff;
+        bool            isOpreator;
+        bool            isGuest;
+        bool            loggedIn;
+        std::string		clientBuff;
         
         client();
         ~client();

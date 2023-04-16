@@ -6,28 +6,14 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 22:31:50 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:25:13 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/ioctl.h>
-#include <sys/poll.h>
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <poll.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
+#include "irc.hpp"
 #include "client.hpp"
 
 class server {
@@ -55,7 +41,7 @@ class server {
         bool startServ();
         void addNewClient();
         void checkConnectedClients();
-        void parseReceivedData(size_t pos);
+        void parseDataAndRespond(size_t pos);
         bool HasError(std::vector<std::string> cmd);
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
         

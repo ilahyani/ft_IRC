@@ -6,11 +6,12 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:56:48 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 22:33:44 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 15:25:33 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
+#include "irc.hpp"
 
 int main(int ac, char **av) {
     server  serv;

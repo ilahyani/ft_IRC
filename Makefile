@@ -1,4 +1,4 @@
-SRC = main.cpp server.cpp client.cpp \
+SRC = main.cpp server.cpp client.cpp Channels.cpp\
       commands/join.cpp commands/kick.cpp commands/nick.cpp commands/notice.cpp commands/part.cpp \
       commands/pass.cpp commands/privmsg.cpp commands/quit.cpp commands/topic.cpp commands/user.cpp
 
@@ -10,7 +10,7 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
 NAME = ircserv
 
-HEADER = server.hpp client.hpp
+HEADER = irc.hpp server.hpp client.hpp Channels.hpp
 
 all: $(NAME)
 
