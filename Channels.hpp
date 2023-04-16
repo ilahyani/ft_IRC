@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:40:56 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:45:26 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Channels
         const std::string&              geTopic();   
         void                            setTopic(std::string topic);
         const std::vector<client>&      getMembers();
-        void                            addMember(client& client, bool makeOperator);
-        // void                            removeMember(client& client);
+        void                            addMember(client& member, bool makeOperator);
+        void                            removeMember(client& member);
         // bool                            checkKey(std::string key);
 };

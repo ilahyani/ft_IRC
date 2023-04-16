@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:40:44 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 18:48:28 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,21 @@ const std::vector<client>&   Channels::getMembers() {
     return _channelMembers;
 }
 
-void    Channels::addMember(client& client, bool makeOperator) {
-    _channelMembers.push_back(client);
+void    Channels::addMember(client& member, bool makeOperator) {
+    _channelMembers.push_back(member);
     if (makeOperator) {
-        client.isOpreator = true;
-        _channelOperators.push_back(client);
+        member.isOpreator = true;
+        _channelOperators.push_back(member);
     }
+}
+
+void    Channels::removeMember(client& member) {
+    std::vector<client>::iterator it;
+
+    it = std::find(_channelMembers.begin(), _channelMembers.end(), member);
+    if (it != _channelMembers.end())
+        _channelMembers.erase(it);
+    it = std::find(_channelOperators.begin(), _channelOperators.end(), member);
+    if (it != _channelOperators.end())
+        _channelOperators.erase(it);
 }
