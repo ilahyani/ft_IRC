@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:25:13 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:37:51 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 class server {
 
-    typedef bool (server::*cmd)(std::vector<std::string> params, std::map<int, client>::iterator client);
+    typedef void (server::*cmd)(std::vector<std::string> params, std::map<int, client>::iterator client);
 
     int                        _listenSocket;
     int                        _newSocket;
@@ -45,18 +45,18 @@ class server {
         bool HasError(std::vector<std::string> cmd);
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
         
-        /* COMMANDS (make void later)*/
+        /* COMMANDS */
         
-        bool pass(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool nick(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool user(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool join(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool kick(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool part(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool notice(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool privmsg(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool quit(std::vector<std::string> params, std::map<int, client>::iterator client);
-        bool topic(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void pass(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void nick(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void user(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void join(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void kick(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void part(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void notice(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void privmsg(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void quit(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void topic(std::vector<std::string> params, std::map<int, client>::iterator client);
 };
 
 #endif
