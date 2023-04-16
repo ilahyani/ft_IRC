@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 00:20:17 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 00:22:24 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void server::parseReceivedData(size_t pos) {
     else {
         // append the data to the client buffer and copy it to a temporary buffer
         _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff += msg.substr(0, msgEnd);
-        _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff += "    ";
+        // _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff += "    ";
         std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd)._clientBuff.c_str());
         
         // tokenize the command and add the tokens to the vector
