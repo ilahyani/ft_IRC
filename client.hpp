@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 15:49:38 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 22:03:04 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 #define CLIENT_HPP
 
 #include "irc.hpp"
+#include "Channels.hpp"
 
 class client {
-    int				_socket;
-    std::string		_passwd;
-    std::string		_hostname;
-    std::string		_nickname;
-    std::string		_username;
-    std::string		_realname;
-	// Channels        _channels;
+    int				        _socket;
+    std::string		        _passwd;
+    std::string		        _hostname;
+    std::string		        _nickname;
+    std::string		        _username;
+    std::string		        _realname;
+	std::vector<Channels>   _channels;
     public:
         bool            isOpreator;
         bool            isGuest;
