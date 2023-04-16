@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 18:17:53 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/15 22:31:50 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ class server {
         int getPort();
         void setPort();
         bool startServ();
-        bool addNewClient();
-        bool checkConnectedClients();
-        bool parseReceivedData(size_t pos);
+        void addNewClient();
+        void checkConnectedClients();
+        void parseReceivedData(size_t pos);
         bool HasError(std::vector<std::string> cmd);
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
         

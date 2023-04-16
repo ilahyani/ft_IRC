@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/15 09:15:51 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/15 22:51:27 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ class client {
     public:
         bool            _isOpreator;
         bool            _isGuest;
+        bool            _loggedIn;
         std::string		_clientBuff;
-        /* Methods */
+        
         client();
         ~client();
         client(int _socket);

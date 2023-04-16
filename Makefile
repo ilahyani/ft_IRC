@@ -6,7 +6,7 @@ OBJ = $(SRC:%.cpp=%.o)
 
 CC = c++
 
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
 NAME = ircserv
 
