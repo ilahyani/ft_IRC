@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:48:23 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:59:43 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <cctype>
+#include <ctype.h>
 #include <vector>
 #include <map>
 
