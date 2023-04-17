@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:26:27 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:49:07 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool server::startServ() {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
     _addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    if (bind(_listenSocket, (struct sockaddr *)&_addr, sizeof(_addr)))
+    if (bind(_listenSocket, (struct sockaddr *)&_addr, sizeof(_addr))) //reinterpret cast<>
         return std::cerr << "Failed to bind socket, Port already in use\n", false;
 
     if (listen(_listenSocket, 32) < 0) {
@@ -84,13 +84,14 @@ void server::addNewClient() {
         return;
     }
     std::cout << "Connection Accepted\n";
+    
     fd.fd = _newSocket;
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
     client newClient(_newSocket);
+    newClient.setHostname(inet_ntoa(_addr.sin_addr));
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
 }
-
 
 void    server::checkConnectedClients() {
     int recvBytes;

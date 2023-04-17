@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:37:51 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:57:27 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class server {
 
     int                        _listenSocket;
     int                        _newSocket;
-    char                       _buff[512];
+    char                       _buff[513];
     int                        _port;
     std::string                _passwd;
     struct sockaddr_in         _addr;

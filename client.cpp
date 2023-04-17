@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 15:37:17 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:46:05 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ const std::string& client::getUsername() {
 
 const std::string& client::getHostname() {
     return _hostname;
+}
+
+void    client::setHostname(std::string hostName) {
+   _hostname = hostName;
 }
 
 const std::string& client::getPasswd() {

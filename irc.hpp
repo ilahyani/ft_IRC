@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 15:24:58 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:48:23 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <arpa/inet.h>
 #include <iostream>
 #include <string>
 #include <vector>
