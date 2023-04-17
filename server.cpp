@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:49:07 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/17 15:13:22 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,14 @@ void server::parseDataAndRespond(size_t pos) {
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff += msg.substr(0, msgEnd);
         std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.c_str());
         token = std::strtok(str, " ");
+        if (token[0] == ':')
+            token = std::strtok(NULL, " ");
         while (token != NULL) {
             cmdVec.push_back(token);
             token = std::strtok(NULL, " ");
         }
+        if (!cmdVec.empty())
+            std::transform(cmdVec[0].begin(), cmdVec[0].end(), cmdVec[0].begin(), ::tolower);
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.clear();
         if (!HasError(cmdVec))
             respondToClient(cmdVec, _connectedClients.find(_fdsVec.at(pos).fd));
@@ -151,7 +155,12 @@ void server::parseDataAndRespond(size_t pos) {
 
 bool    server::HasError(std::vector<std::string> cmdVec) {
     // https://www.rfc-editor.org/rfc/rfc2812#section-2
-    (void)cmdVec;
+    
+    for (size_t i = 0; i < cmdVec.size(); i++) {
+        std::cout << cmdVec[i] << " ";
+        if (i == cmdVec.size() - 1)
+            std::cout << std::endl;
+    }
     return false;
 }
 
@@ -160,7 +169,7 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
     std::string command;
 
     if (cmdVec.size() > 0)
-        command = (cmdVec[0][0] == ':' ? cmdVec[1] : cmdVec[0]);
+        command = cmdVec[0];
     cmd_it = _cmdMap.find(command);
     if (client->second.loggedIn) {
         if (!client->second.isGuest) {
