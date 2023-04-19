@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/17 14:59:43 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/19 01:54:09 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <arpa/inet.h>
+#include <cstdlib>
+#include <fstream>
+#include <ctime>
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <algorithm>

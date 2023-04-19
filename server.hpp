@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:57:27 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/19 01:55:52 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class server {
         void privmsg(std::vector<std::string> params, std::map<int, client>::iterator client);
         void quit(std::vector<std::string> params, std::map<int, client>::iterator client);
         void topic(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
 };
 
 #endif
