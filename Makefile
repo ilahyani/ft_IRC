@@ -1,6 +1,7 @@
 SRC = main.cpp server.cpp client.cpp \
       commands/join.cpp commands/kick.cpp commands/nick.cpp commands/notice.cpp commands/part.cpp \
-      commands/pass.cpp commands/privmsg.cpp commands/quit.cpp commands/topic.cpp commands/user.cpp commands/bot.cpp
+      commands/pass.cpp commands/privmsg.cpp commands/quit.cpp commands/topic.cpp commands/user.cpp \
+	  commands/invite.cpp commands/list.cpp commands/mod.cpp commands/names.cpp commands/bot.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 

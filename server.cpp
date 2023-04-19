@@ -6,15 +6,15 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 02:31:58 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:32:36 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 void server::_cmdMapinit() {
-    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "bot"};
-    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::bot};
+    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mod", "bot"};
+    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mod, &server::bot};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
