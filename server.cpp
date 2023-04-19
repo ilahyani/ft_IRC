@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 01:56:20 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/19 02:31:58 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void server::parseDataAndRespond(size_t pos) {
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff += msg.substr(0, msgEnd);
         std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.c_str());
         token = std::strtok(str, " ");
-        if (token[0] == ':')
+        if (token && token[0] == ':')
             token = std::strtok(NULL, " ");
         while (token != NULL) {
             cmdVec.push_back(token);
