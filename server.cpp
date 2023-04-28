@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 02:32:36 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/27 12:42:08 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void server::addNewClient() {
         std::cerr << "Failed to accept connection\n";
         return;
     }
-    std::cout << "Connection Accepted\n";
+    std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
     
     fd.fd = _newSocket;
     fd.events = POLLIN;
@@ -192,11 +192,14 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
         }
     }
     else {
-        if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass")) {
-            client->second.loggedIn = true;
+        if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass"))
             server::pass(cmdVec, client);
-        }
         else
             std::cout << "Please Login to the server using the PASS command\n";
     }
+}
+
+std::string server::getPasswd()
+{
+    return _passwd;
 }

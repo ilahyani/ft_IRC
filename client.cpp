@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:46:05 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:54:08 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ const std::string& client::getHostname() {
 
 void    client::setHostname(std::string hostName) {
    _hostname = hostName;
+}
+
+void    client::setNickname(std::string nickname){
+    _nickname = nickname;
 }
 
 const std::string& client::getPasswd() {
