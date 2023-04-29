@@ -28,7 +28,6 @@ bool isNicknameValid(std::string nick) {
 }
 
 void server::nick(std::vector<std::string> params, std::map<int, client>::iterator client) {
-
     if (params.size() == 2 && client->second.getNickname().empty())
     {
         if (isNicknameValid(params[1]))

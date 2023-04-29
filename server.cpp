@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/27 12:42:08 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/04/29 13:44:39 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,16 +179,23 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
                 std::cerr << "Error: unknown command\n";
         }
         else {
-            if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("nick")) {
-                server::nick(cmdVec, client);
-                client->second.isGuest = false;
-            }
-            else if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("user")){
-                server::user(cmdVec, client);
-                client->second.isGuest = false;
+            if (cmd_it != _cmdMap.end() && (!cmd_it->first.compare("nick") || !cmd_it->first.compare("user"))) 
+            {
+                if(!cmd_it->first.compare("nick"))
+                    server::nick(cmdVec, client);
+                else if (!cmd_it->first.compare("user"))
+                    server::user(cmdVec, client);
+                else if (!client->second.getNickname().empty() && !client->second.getRealname().empty() 
+                    && !client->second.getUsername().empty() && !client->second.getHostname().empty())
+                {
+                    client->second.isGuest = false;
+                }
             }
             else
-                std::cout << "Please register to the server using NICK and USER commands\n";
+                if (!client->second.getNickname().empty())
+                    std::cout << "Please register to the server using USER command\n";
+                else
+                    std::cout << "Please register to the server using NICK and USER commands\n";
         }
     }
     else {
