@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 23:58:22 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/29 13:34:51 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ class client {
         const std::string& getUsername();
         const std::string& getHostname();
         const std::string& getPasswd();
-        void               setHostname(std::string); 
+        void               setHostname(std::string);
+        void               setNickname(std::string);
 };
 
 #endif

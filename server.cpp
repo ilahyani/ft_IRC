@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 02:32:36 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/29 13:44:39 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void server::addNewClient() {
         std::cerr << "Failed to accept connection\n";
         return;
     }
-    std::cout << "Connection Accepted\n";
+    std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
     
     fd.fd = _newSocket;
     fd.events = POLLIN;
@@ -179,24 +179,34 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
                 std::cerr << "Error: unknown command\n";
         }
         else {
-            if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("nick")) {
-                server::nick(cmdVec, client);
-                client->second.isGuest = false;
-            }
-            else if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("user")){
-                server::user(cmdVec, client);
-                client->second.isGuest = false;
+            if (cmd_it != _cmdMap.end() && (!cmd_it->first.compare("nick") || !cmd_it->first.compare("user"))) 
+            {
+                if(!cmd_it->first.compare("nick"))
+                    server::nick(cmdVec, client);
+                else if (!cmd_it->first.compare("user"))
+                    server::user(cmdVec, client);
+                else if (!client->second.getNickname().empty() && !client->second.getRealname().empty() 
+                    && !client->second.getUsername().empty() && !client->second.getHostname().empty())
+                {
+                    client->second.isGuest = false;
+                }
             }
             else
-                std::cout << "Please register to the server using NICK and USER commands\n";
+                if (!client->second.getNickname().empty())
+                    std::cout << "Please register to the server using USER command\n";
+                else
+                    std::cout << "Please register to the server using NICK and USER commands\n";
         }
     }
     else {
-        if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass")) {
-            client->second.loggedIn = true;
+        if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass"))
             server::pass(cmdVec, client);
-        }
         else
             std::cout << "Please Login to the server using the PASS command\n";
     }
+}
+
+std::string server::getPasswd()
+{
+    return _passwd;
 }

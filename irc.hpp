@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 01:54:09 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/04/29 13:29:05 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRC_HPP
 #define IRC_HPP
 
+#include <cstring>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
