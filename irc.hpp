@@ -37,5 +37,6 @@
 #include <ctype.h>
 #include <vector>
 #include <map>
+#include <cstring>
 
 #endif

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/29 13:31:57 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/04/29 13:32:16 by kid-bouh         ###   ########.fr       */
+/*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
+/*   Updated: 2023/04/27 12:21:36 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ bool isNicknameValid(std::string nick) {
 }
 
 void server::nick(std::vector<std::string> params, std::map<int, client>::iterator client) {
-
-    if (params.size() == 2 && client->second.getNickname().empty() )
+    if (params.size() == 2 && client->second.getNickname().empty())
     {
         if (isNicknameValid(params[1]))
         {
