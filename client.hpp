@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 18:17:46 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 23:32:41 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,12 @@ class client {
         const std::string& getPasswd();
         void               setHostname(std::string);
         void               setNickname(std::string);
-void print(std::string str);
-void response(std::string str);
-std::string get_format();
-void welcome();
+        void               setRealname(std::string);
+        void               setUsername(std::string);
+        void               print(std::string str);
+        void               response(std::string str);
+        std::string        get_format();
+        void               welcome();
 
 };
 

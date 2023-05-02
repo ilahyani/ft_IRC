@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:05:23 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/02 18:22:59 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/03 00:49:39 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 bool isUsernameValid(std::string nick) {
 
     std::string invalidChars = " ,:;-?!&%\\/()[]{}\"'~^$#*";
+
+    if (nick[0] == '.')
+        return false;
+
+    for (int i = 0; i < (int)nick.length(); i++)
+    {
+        if (invalidChars.find(nick[i]) != std::string::npos)
+            return false;
+    }
+    return true;
+}
+
+bool isRealnameValid(std::string nick) {
+
+    std::string invalidChars = ",:;_?!&%\\/()[]{}\"'~^$#*";
 
     if (nick[0] == '.')
         return false;
@@ -43,11 +58,12 @@ void server::user(std::vector<std::string> params, std::map<int, client>::iterat
         return ;
     }
 
-    for (int i = 4; i < params.size(); i++)
+    for (int i = 4; i < (int)params.size(); i++)
     {
         Realname += params[i] + " ";
     }
 
-        
+    client->second.setUsername(params[1]);
+    client->second.setRealname(Realname);
     client->second.welcome();
 }

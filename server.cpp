@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 18:16:22 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 23:20:07 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
             if (cmd_it != _cmdMap.end())
                 (this->*(cmd_it->second))(cmdVec, client);
             else
-                std::cerr << "Error: unknown command\n";
+                client->second.response(ERR_UNKNOWNCOMMAND(client->second.getNickname(), command));
         }
         else {
             if (cmd_it != _cmdMap.end() && (!cmd_it->first.compare("nick") || !cmd_it->first.compare("user"))) 
