@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/29 13:44:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:16:22 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,17 +185,9 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
                     server::nick(cmdVec, client);
                 else if (!cmd_it->first.compare("user"))
                     server::user(cmdVec, client);
-                else if (!client->second.getNickname().empty() && !client->second.getRealname().empty() 
-                    && !client->second.getUsername().empty() && !client->second.getHostname().empty())
-                {
-                    client->second.isGuest = false;
-                }
             }
             else
-                if (!client->second.getNickname().empty())
-                    std::cout << "Please register to the server using USER command\n";
-                else
-                    std::cout << "Please register to the server using NICK and USER commands\n";
+                std::cout << "Please register to the server using NICK and USER commands\n";
         }
     }
     else {
@@ -209,4 +201,15 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
 std::string server::getPasswd()
 {
     return _passwd;
+}
+
+bool server::Check_client(std::string nick)
+{   
+    std::map<int, client>::iterator it = _connectedClients.begin();
+    for (; it != _connectedClients.end(); it++)
+    {
+        if (nick == it->second.getNickname())
+            return true;
+    }
+    return false;
 }

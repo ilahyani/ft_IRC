@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 02:25:00 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:16:01 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 class server {
 
     typedef void (server::*cmd)(std::vector<std::string> params, std::map<int, client>::iterator client);
+    typedef std::map<int, client>::iterator client_iter;
 
     int                        _listenSocket;
     int                        _newSocket;
@@ -44,6 +45,8 @@ class server {
         void parseDataAndRespond(size_t pos);
         bool HasError(std::vector<std::string> cmd);
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
+
+        bool Check_client(std::string Nick);
         
         /* COMMANDS */
         

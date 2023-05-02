@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/04/27 12:21:36 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:16:39 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,26 @@ bool isNicknameValid(std::string nick) {
 }
 
 void server::nick(std::vector<std::string> params, std::map<int, client>::iterator client) {
-    if (params.size() == 2 && client->second.getNickname().empty())
-    {
-        if (isNicknameValid(params[1]))
-        {
-            client->second.setNickname(params[1]);
-            std::cout << "The Nickname (" << client->second.getNickname() << ") has been added \n";
-        }
-        else 
-           std::cout << "Invalid characters in nickname, Try Again !"; 
-    }
-    else if (params.size() == 2 && !client->second.getNickname().empty())
-    {
-        std::string old_nick;
 
-        old_nick = client->second.getNickname();
-        if (isNicknameValid(params[1]))
-        {
-            client->second.setNickname(params[1]);
-            std::cout << "The Nickname (" << old_nick << ") has been changed to " << client->second.getNickname() << '\n';
-        }
-        else 
-           std::cout << "Invalid characters in nickname, Try Again !"; 
+    if (params.size() != 2)
+    {
+        client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
+        return ;
     }
+
+    if (!isNicknameValid(params[1]))
+    {
+        client->second.response(ERR_ERRONEUSNICKNAME(client->second.getNickname()));
+        return ;
+    }
+    
+    if (server::Check_client(params[1]))
+    {
+        client->second.response(ERR_NICKNAMEINUSE(client->second.getNickname()));
+        return ;
+    }
+
+    client->second.setNickname(params[1]);
+
+    client->second.welcome();
 }

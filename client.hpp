@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/29 13:34:51 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:17:46 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 #define CLIENT_HPP
 
 #include "irc.hpp"
+
+#define ERR_NEEDMOREPARAMS(src)       "461 " + src + " :Not enough parameters"
+#define ERR_PASSWDMISMATCH(src)       "464 " + src + " :Incorrect password"
+#define ERR_UNKNOWNCOMMAND(src, cmd)  "421 " + src + " " + cmd + " :Unknown command"
+#define ERR_ERRONEUSNICKNAME(src)     "432 " + src + " :Erroneus nickname"
+#define ERR_NICKNAMEINUSE(src)        "433 " + src + " :Nickname is already in use"
+#define ERR_ALREADYREGISTRED(src)     "462 " + src + " :You may not reregister"
+#define IRC_WELCOME(src)              "001 " + src + " :Welcome to IRC Network"
 
 class client {
     int				        _socket;
@@ -25,6 +33,7 @@ class client {
     public:
         bool            isOpreator;
         bool            isGuest;
+        bool            isRegistered;
         bool            loggedIn;
         std::string		clientBuff;
         
@@ -39,6 +48,11 @@ class client {
         const std::string& getPasswd();
         void               setHostname(std::string);
         void               setNickname(std::string);
+void print(std::string str);
+void response(std::string str);
+std::string get_format();
+void welcome();
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/29 13:35:36 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:10:38 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ client::client() {
     isGuest = true;
     isOpreator = false;
     loggedIn = false;
+    isRegistered = false;
 }
 
 client:: client(int socket) : _socket(socket) {
     isGuest = true;
     isOpreator = false;
     loggedIn = false;
+    isRegistered = false;
 }
 
 client::~client() {}
@@ -56,4 +58,31 @@ void client::setNickname(std::string nickname) {
 
 void client::setHostname(std::string hostName) {
    _hostname = hostName;
+}
+
+std::string client::get_format()
+{
+    return client::getNickname() + "!" + client::getUsername() + "@" + client::getHostname();
+}
+
+void client::response(std::string str)
+{
+    print(":" + get_format() + str);
+}
+
+void client::print(std::string str)
+{
+    std::string buff = str + "\n";
+    if (send(_socket, buff.c_str(), buff.length(), 0) < 0)
+        throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+}
+
+void client::welcome()
+{
+    if (isGuest && !client::getNickname().empty() && !client::getRealname().empty() && !client::getUsername().empty())
+    {
+        client::isGuest = false;
+        client::isRegistered = true;
+        client::response(IRC_WELCOME(client::getNickname()));
+    }
 }
