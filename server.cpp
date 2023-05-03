@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/29 13:44:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/03 09:03:13 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool server::startServ() {
             close (_listenSocket);
             return std::cerr << "Unexpected error\n", false;
     }
-    std::vector<int> second (4,100);
+    // std::vector<int> second (4,100);
     memset(&_addr, 0, sizeof(_addr));
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -65,7 +65,6 @@ bool server::startServ() {
         int rv = poll(&_fdsVec[0], _fdsVec.size(), -1);
         if (rv < 0)
             return std::cerr << "Poll() system call failed\n", false;
-
         if (_fdsVec[0].revents == POLLIN)
             addNewClient();
         else
@@ -83,7 +82,8 @@ void server::addNewClient() {
         std::cerr << "Failed to accept connection\n";
         return;
     }
-    std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
+    // std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
+    send(_newSocket, "Connection Accepted\nPlease Login to the server using the PASS command\n", 71, 0);
     
     fd.fd = _newSocket;
     fd.events = POLLIN;
@@ -193,16 +193,19 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
             }
             else
                 if (!client->second.getNickname().empty())
-                    std::cout << "Please register to the server using USER command\n";
+                    send(client->first, "Please register to the server using USER command\n", 60, 0);
+                    // std::cout << "Please register to the server using USER command\n";
                 else
-                    std::cout << "Please register to the server using NICK and USER commands\n";
+                    send(client->first, "Please register to the server using NICK and USER commands\n", 60, 0);
+                    // std::cout << "Please register to the server using NICK and USER commands\n";
         }
     }
     else {
         if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass"))
             server::pass(cmdVec, client);
         else
-            std::cout << "Please Login to the server using the PASS command\n";
+            send(client->first, "Please Login to the server using the PASS command\n", 51, 0);
+            // std::cout << "Please Login to the server using the PASS command\n";
     }
 }
 
