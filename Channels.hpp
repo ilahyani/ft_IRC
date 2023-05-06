@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:45:26 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/05/07 00:40:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ class Channels
     client                  _channelOwner;
     public:
         Channels();
-        Channels(std::string name, std::string key, client owner);
-        Channels(std::string name, client owner);
+        Channels(std::string name, std::string key, client& owner);
+        Channels(std::string name, client& owner);
         ~Channels();
 
         bool                            isProtected;
@@ -37,6 +37,8 @@ class Channels
         void                            setTopic(std::string topic);
         const std::vector<client>&      getMembers();
         void                            addMember(client& member, bool makeOperator);
-        void                            removeMember(client& member);
+        const std::string&              getOwnerNickname();
+        void                            setOwner(client client);
+        // void                            removeMember(client& member);
         // bool                            checkKey(std::string key);
 };

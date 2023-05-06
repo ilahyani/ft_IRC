@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 23:32:41 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/07 00:53:06 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,20 @@
 
 #include "irc.hpp"
 
-#define ERR_NEEDMOREPARAMS(src)       "461 " + src + " :Not enough parameters"
-#define ERR_PASSWDMISMATCH(src)       "464 " + src + " :Incorrect password"
-#define ERR_UNKNOWNCOMMAND(src, cmd)  "421 " + src + " " + cmd + " :Unknown command"
-#define ERR_ERRONEUSNICKNAME(src)     "432 " + src + " :Erroneus nickname"
-#define ERR_NICKNAMEINUSE(src)        "433 " + src + " :Nickname is already in use"
-#define ERR_ALREADYREGISTRED(src)     "462 " + src + " :You may not reregister"
-#define IRC_WELCOME(src)              "001 " + src + " :Welcome to IRC Network"
+#define ERR_NEEDMOREPARAMS(nick)       "461 " + nick + " :Not enough parameters"
+#define ERR_PASSWDMISMATCH(nick)       "464 " + nick + " :Incorrect password"
+#define ERR_UNKNOWNCOMMAND(nick, cmd)  "421 " + nick + " " + cmd + " :Unknown command"
+#define ERR_ERRONEUSNICKNAME(nick)     "432 " + nick + " :Erroneus nickname"
+#define ERR_NICKNAMEINUSE(nick)        "433 " + nick + " :Nickname is already in use"
+#define ERR_ALREADYREGISTRED(nick)     "462 " + nick + " :You may not reregister"
+#define IRC_WELCOME(nick)              "001 " + nick + " :Welcome to IRC Network"
+
+#define ERR_CANNOTSENDTOCHAN(nick)     "404 " + nick + " :Cannot send to channel"
+#define ERR_NOTEXTTOSEND(nick)         "412 " + nick + " :No text to send"
+#define ERR_NOSUCHNICK(nick)           "401 " + nick + " :No such nick/channel"
+#define ERR_BADCHANNAME(nick)          "479 " + nick + " :Invalid channel name"
+#define ERR_BADCHANNELKEY(nick)        "475 " + nick + " :Cannot join channel (+k)"
+#define ERR_USERONCHANNEL(nick, ch)    "443 " + nick + " " + ch + " :is already on channel"
 
 class client {
     int				        _socket;

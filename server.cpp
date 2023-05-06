@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 23:20:07 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/06 23:23:44 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,4 +212,26 @@ bool server::Check_client(std::string nick)
             return true;
     }
     return false;
+}
+
+client* server::get_client(std::string nick)
+{   
+    std::map<int, client>::iterator it = _connectedClients.begin();
+    for (; it != _connectedClients.end(); it++)
+    {
+        if (nick == it->second.getNickname())
+            return &it->second;
+    }
+    return NULL;
+}
+
+Channels* server::getChannel(std::string channel_name)
+{
+    std::vector<Channels>::iterator it = _Channels.begin();
+    for (; it != _Channels.end(); it++)
+    {
+        if (channel_name == it->getName())
+            return (&(*it));
+    }
+    return NULL;
 }

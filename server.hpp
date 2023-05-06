@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 18:16:01 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/07 00:34:08 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "irc.hpp"
 #include "client.hpp"
+#include "Channels.hpp"
 
 class server {
 
@@ -30,6 +31,7 @@ class server {
     std::vector<struct pollfd> _fdsVec;
     std::map<int, client>      _connectedClients;
     std::map<std::string, cmd> _cmdMap;
+    std::vector<Channels>      _Channels;
     void                       _cmdMapinit();
     public:
         server();
@@ -47,6 +49,12 @@ class server {
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
 
         bool Check_client(std::string Nick);
+        client* get_client(std::string nick);
+        void send_message_to_user(std::string user, std::string message, client client);
+        void join_to_channel(std::string channel, std::string key, client& client);
+        Channels* getChannel(std::string channel_name);
+
+
         
         /* COMMANDS */
         

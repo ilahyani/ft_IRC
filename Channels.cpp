@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:48:28 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/05/07 00:40:35 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 Channels::Channels() {}
 
-Channels::Channels(std::string name, std::string key, client owner)
+Channels::Channels(std::string name, std::string key, client& owner)
     : _channelName(name), _channelKey(key), _channelOwner(owner) {
         isProtected = true;
     }
 
-Channels::Channels(std::string name, client owner)
+Channels::Channels(std::string name, client& owner)
     : _channelName(name), _channelOwner(owner) {
         isProtected = false;
     }
@@ -63,13 +63,19 @@ void    Channels::addMember(client& member, bool makeOperator) {
     }
 }
 
-void    Channels::removeMember(client& member) {
-    std::vector<client>::iterator it;
-
-    it = std::find(_channelMembers.begin(), _channelMembers.end(), member);
-    if (it != _channelMembers.end())
-        _channelMembers.erase(it);
-    it = std::find(_channelOperators.begin(), _channelOperators.end(), member);
-    if (it != _channelOperators.end())
-        _channelOperators.erase(it);
+const std::string& Channels::getOwnerNickname()
+{
+    return _channelOwner.getNickname();
 }
+
+
+// void    Channels::removeMember(client& member) {
+//     std::vector<client>::iterator it;
+
+//     it = std::find(_channelMembers.begin(), _channelMembers.end(), member);
+//     if (it != _channelMembers.end())
+//         _channelMembers.erase(it);
+//     it = std::find(_channelOperators.begin(), _channelOperators.end(), member);
+//     if (it != _channelOperators.end())
+//         _channelOperators.erase(it);
+// }
