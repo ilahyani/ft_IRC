@@ -68,7 +68,6 @@ const std::string& Channels::getOwnerNickname()
     return _channelOwner.getNickname();
 }
 
-
 // void    Channels::removeMember(client& member) {
 //     std::vector<client>::iterator it;
 

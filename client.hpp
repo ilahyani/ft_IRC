@@ -6,10 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/07 00:53:06 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/12 19:43:52 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
@@ -29,6 +30,11 @@
 #define ERR_BADCHANNAME(nick)          "479 " + nick + " :Invalid channel name"
 #define ERR_BADCHANNELKEY(nick)        "475 " + nick + " :Cannot join channel (+k)"
 #define ERR_USERONCHANNEL(nick, ch)    "443 " + nick + " " + ch + " :is already on channel"
+
+#define RPL_NAMREPLY(nick, ch, members) "353 " + nick + " = " + ch + " :" + members
+#define RPL_ENDOFNAMES(nick, ch)        "366 " + nick + " " + ch + " :End of NAMES list"
+
+#define ERR_NOSUCHCHANNEL(ch)           "404 " + ch + " :Cannot send to channel"
 
 class client {
     int				        _socket;

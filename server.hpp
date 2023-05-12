@@ -6,10 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/07 00:34:08 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/12 21:58:02 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
@@ -53,9 +54,11 @@ class server {
         void send_message_to_user(std::string user, std::string message, client client);
         void join_to_channel(std::string channel, std::string key, client& client);
         Channels* getChannel(std::string channel_name);
+        void send_message_to_channel(std::string user, std::string message, client client);
+        void    sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender);
 
 
-        
+
         /* COMMANDS */
         
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);
