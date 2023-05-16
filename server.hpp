@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/12 21:58:02 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:31:39 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,17 @@ class server {
         bool HasError(std::vector<std::string> cmd);
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
 
-        bool Check_client(std::string Nick);
-        client* get_client(std::string nick);
-        void send_message_to_user(std::string user, std::string message, client client);
-        void join_to_channel(std::string channel, std::string key, client& client);
-        Channels* getChannel(std::string channel_name);
-        void send_message_to_channel(std::string user, std::string message, client client);
-        void    sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender);
+        bool        Check_client(std::string Nick);
+        client*     get_client(std::string nick);
+        void        send_message_to_user(std::string user, std::string message, client client);
+        void        join_to_channel(std::string channel, std::string key, client& client);
+        Channels*   getChannel(std::string channel_name);
+        void        send_message_to_channel(std::string user, std::string message, client client);
+        void        sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
+        bool        check_client_in_channel(client, Channels*);
 
+        void    responsefromServer(std::string str, client c);
+        void    send_msg_to_all_users(Channels *ch, std::string msg, client c);
 
 
         /* COMMANDS */

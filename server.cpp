@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/06 23:23:44 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:55:04 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,29 @@ void    server::checkConnectedClients() {
         }   
     }
 }
-   
+
+int check_next_space(std::string token, int i)
+{
+    int j = 0;
+    while (j < (int)token.size())
+    {
+        if (token[j] == ' ' || token[j] == '\0')
+            return (i);
+        j++;
+        i++;
+    }    
+    return (i);
+}
+
 void server::parseDataAndRespond(size_t pos) {
     std::vector<std::string>    cmdVec;
     std::string                 msg(_buff);
     size_t                      msgEnd;
-    char                        *token;
+    // char                        *token;
     char                        str[512];
+
+    std::string     str1;
+    std::string     cm;
 
     msgEnd = msg.find_first_of("\r\n");
     if (msgEnd == std::string::npos)
@@ -138,13 +154,40 @@ void server::parseDataAndRespond(size_t pos) {
     else {
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff += msg.substr(0, msgEnd);
         std::strcpy(str, _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.c_str());
-        token = std::strtok(str, " ");
-        if (token && token[0] == ':')
-            token = std::strtok(NULL, " ");
-        while (token != NULL) {
-            cmdVec.push_back(token);
-            token = std::strtok(NULL, " ");
+
+        str1 = _connectedClients.at(_fdsVec.at(pos).fd).clientBuff;
+
+        int i = 0;
+        int j = 0;
+        while (i < (int)str1.size())
+        {
+            if (str1[i] == ' ')
+                i++;
+            if (str1[i] == ':')
+            {
+                j = 0;
+                i++;
+                while (str1[i] && j < (int)str1.size())
+                    str[j++] = str1[i++];
+                str[j] = '\0';
+                cmdVec.push_back(str);
+                break;
+            }
+            j = 0;
+            while (str1[i] && (str1[i] != ' '))
+                str[j++] = str1[i++];
+            str[j] = '\0';
+            cmdVec.push_back(str);
+            i++;
         }
+        
+        // token = std::strtok(str, " ");
+        // if (token && token[0] == ':')
+        //     token = std::strtok(NULL, " ");
+        // while (token != NULL) {
+        //     cmdVec.push_back(token);
+        //     token = std::strtok(NULL, " ");
+        // }
         if (!cmdVec.empty())
             std::transform(cmdVec[0].begin(), cmdVec[0].end(), cmdVec[0].begin(), ::tolower);
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.clear();
@@ -234,4 +277,15 @@ Channels* server::getChannel(std::string channel_name)
             return (&(*it));
     }
     return NULL;
+}
+
+void    server::sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
+{
+    std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
+    if(get_client(receiver))
+    {
+        if (send(get_client(receiver)->getsocket(), msg.c_str(), msg.length(), 0) < 0)
+            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+    }
+    msg.clear();
 }
