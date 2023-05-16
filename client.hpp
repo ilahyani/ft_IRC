@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/12 19:43:52 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:09:01 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@
 #define RPL_NAMREPLY(nick, ch, members) "353 " + nick + " = " + ch + " :" + members
 #define RPL_ENDOFNAMES(nick, ch)        "366 " + nick + " " + ch + " :End of NAMES list"
 
-#define ERR_NOSUCHCHANNEL(ch)           "404 " + ch + " :Cannot send to channel"
+#define ERR_NOSUCHCHANNEL(nick, ch)      "403 " + nick + " " + ch + " :No such channel"
+#define RPL_TOPIC(nick, ch, topic)       "332 " + nick + " " + ch + " :" + topic
+#define ERR_NOTONCHANNEL(nick, ch)       "442 " + nick + " " + ch + " :You're not on that channel"
+#define RPL_NOTOPIC(nick, ch)            "331 " + nick + " " + ch + " :No topic is set"
 
 class client {
     int				        _socket;
@@ -67,7 +70,7 @@ class client {
         void               response(std::string str);
         std::string        get_format();
         void               welcome();
-
+        void               responsefromServer(std::string str);
 };
 
 #endif

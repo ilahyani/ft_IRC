@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/12 18:44:19 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:51:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,17 @@ void client::setHostname(std::string hostName) {
 
 std::string client::get_format()
 {
-    return client::getNickname() + "!" + client::getUsername() + "@" + client::getHostname();
+    return client::getNickname() + "!" + client::getUsername() + "@" + client::getHostname() + " ";
 }
 
 void client::response(std::string str)
 {
     print(":" + get_format() + str);
+}
+
+void client::responsefromServer(std::string str)
+{
+    print(":" + getHostname() + " " + str);
 }
 
 void client::print(std::string str)
