@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/07 00:40:23 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:55:29 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Channels
         void                            addMember(client& member, bool makeOperator);
         const std::string&              getOwnerNickname();
         void                            setOwner(client client);
+        const client&                   getOwner();
         // void                            removeMember(client& member);
         // bool                            checkKey(std::string key);
 };

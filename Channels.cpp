@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/07 00:40:35 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:55:11 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void    Channels::addMember(client& member, bool makeOperator) {
 const std::string& Channels::getOwnerNickname()
 {
     return _channelOwner.getNickname();
+}
+
+const client& Channels::getOwner()
+{
+    return _channelOwner;
 }
 
 // void    Channels::removeMember(client& member) {
