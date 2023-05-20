@@ -6,15 +6,15 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/16 19:55:04 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 21:19:55 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 void server::_cmdMapinit() {
-    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mod", "bot"};
-    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mod, &server::bot};
+    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot"};
+    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
@@ -170,6 +170,8 @@ void server::parseDataAndRespond(size_t pos) {
                 while (str1[i] && j < (int)str1.size())
                     str[j++] = str1[i++];
                 str[j] = '\0';
+                // if (std::strlen(str) < 1)
+                //     cmdVec.push_back(":");
                 cmdVec.push_back(str);
                 break;
             }
@@ -241,8 +243,7 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
     }
 }
 
-std::string server::getPasswd()
-{
+std::string server::getPasswd(){
     return _passwd;
 }
 
@@ -279,6 +280,18 @@ Channels* server::getChannel(std::string channel_name)
     return NULL;
 }
 
+// Channels* server::getChannel2(std::string channel_name)
+// {
+//     std::vector<Channels>::iterator it = _Channels.begin();
+    
+//     for (; it != _Channels.end(); it++)
+//     {
+//         if (channel_name == it->getName())
+//             return (&(*it));
+//     }
+//     return NULL;
+// }
+
 void    server::sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
 {
     std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
@@ -288,4 +301,18 @@ void    server::sendToClient(std::string receiver, std::string nick_or_channel, 
             throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
     }
     msg.clear();
+}
+
+bool server::checkUserIsInChannel(client c, Channels *ch)
+{
+    std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
+
+    int i = 0;
+    while (i < (int)Members.size())
+    {
+        if (Members[i].first.getNickname() == c.getNickname())
+            return true;
+        i++;
+    }
+    return false;
 }

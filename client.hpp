@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/16 20:09:01 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 02:48:20 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,36 @@
 
 #include "irc.hpp"
 
-#define ERR_NEEDMOREPARAMS(nick)       "461 " + nick + " :Not enough parameters"
-#define ERR_PASSWDMISMATCH(nick)       "464 " + nick + " :Incorrect password"
-#define ERR_UNKNOWNCOMMAND(nick, cmd)  "421 " + nick + " " + cmd + " :Unknown command"
-#define ERR_ERRONEUSNICKNAME(nick)     "432 " + nick + " :Erroneus nickname"
-#define ERR_NICKNAMEINUSE(nick)        "433 " + nick + " :Nickname is already in use"
-#define ERR_ALREADYREGISTRED(nick)     "462 " + nick + " :You may not reregister"
-#define IRC_WELCOME(nick)              "001 " + nick + " :Welcome to IRC Network"
-
-#define ERR_CANNOTSENDTOCHAN(nick)     "404 " + nick + " :Cannot send to channel"
-#define ERR_NOTEXTTOSEND(nick)         "412 " + nick + " :No text to send"
-#define ERR_NOSUCHNICK(nick)           "401 " + nick + " :No such nick/channel"
-#define ERR_BADCHANNAME(nick)          "479 " + nick + " :Invalid channel name"
-#define ERR_BADCHANNELKEY(nick)        "475 " + nick + " :Cannot join channel (+k)"
-#define ERR_USERONCHANNEL(nick, ch)    "443 " + nick + " " + ch + " :is already on channel"
-
+#define ERR_NEEDMOREPARAMS(nick)        "461 " + nick + " :Not enough parameters"
+#define ERR_PASSWDMISMATCH(nick)        "464 " + nick + " :Incorrect password"
+#define ERR_UNKNOWNCOMMAND(nick, cmd)   "421 " + nick + " " + cmd + " :Unknown command"
+#define ERR_ERRONEUSNICKNAME(nick)      "432 " + nick + " :Erroneus nickname"
+#define ERR_NICKNAMEINUSE(nick)         "433 " + nick + " :Nickname is already in use"
+#define ERR_ALREADYREGISTRED(nick)      "462 " + nick + " :You may not reregister"
+#define IRC_WELCOME(nick)               "001 " + nick + " :Welcome to IRC Network"
+#define ERR_CANNOTSENDTOCHAN(nick)      "404 " + nick + " :Cannot send to channel"
+#define ERR_NOTEXTTOSEND(nick)          "412 " + nick + " :No text to send"
+#define ERR_NOSUCHNICK(nick)            "401 " + nick + " :No such nick/channel"
+#define ERR_BADCHANNAME(nick)           "479 " + nick + " :Invalid channel name"
+#define ERR_BADCHANNELKEY(nick)         "475 " + nick + " :Cannot join channel (+k)"
+#define ERR_USERONCHANNEL(nick, ch)     "443 " + nick + " " + ch + " :is already on channel"
 #define RPL_NAMREPLY(nick, ch, members) "353 " + nick + " = " + ch + " :" + members
 #define RPL_ENDOFNAMES(nick, ch)        "366 " + nick + " " + ch + " :End of NAMES list"
+#define ERR_NOSUCHCHANNEL(nick, ch)     "403 " + nick + " " + ch + " :No such channel"
+#define RPL_TOPIC(nick, ch, topic)      "332 " + nick + " " + ch + " :" + topic
+#define ERR_NOTONCHANNEL(nick, ch)      "442 " + nick + " " + ch + " :You're not on that channel"
+#define RPL_NOTOPIC(nick, ch)           "331 " + nick + " " + ch + " :No topic is set"
 
-#define ERR_NOSUCHCHANNEL(nick, ch)      "403 " + nick + " " + ch + " :No such channel"
-#define RPL_TOPIC(nick, ch, topic)       "332 " + nick + " " + ch + " :" + topic
-#define ERR_NOTONCHANNEL(nick, ch)       "442 " + nick + " " + ch + " :You're not on that channel"
-#define RPL_NOTOPIC(nick, ch)            "331 " + nick + " " + ch + " :No topic is set"
+#define ERR_UNKNOWNMODE(nick, char)     "472 " + nick + " " + char + " :is unknown mode char to me"
 
 class client {
     int				        _socket;
     std::string		        _passwd;
     std::string		        _hostname;
-    std::string		        _nickname;
     std::string		        _username;
     std::string		        _realname;
     public:
+        std::string		_nickname;
         bool            isOpreator;
         bool            isGuest;
         bool            isRegistered;
@@ -71,6 +70,10 @@ class client {
         std::string        get_format();
         void               welcome();
         void               responsefromServer(std::string str);
+    
+        bool operator<(const client & obj) const {
+            return this->_socket < obj._socket;
+        }
 };
 
 #endif

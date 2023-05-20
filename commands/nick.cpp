@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/02 18:16:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/18 21:36:11 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ void server::nick(std::vector<std::string> params, std::map<int, client>::iterat
     }
 
     client->second.setNickname(params[1]);
-
     client->second.welcome();
 }

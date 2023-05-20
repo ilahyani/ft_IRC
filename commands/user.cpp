@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:05:23 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/03 00:49:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/18 21:35:41 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,7 @@ void server::user(std::vector<std::string> params, std::map<int, client>::iterat
         return ;
     }
 
-    for (int i = 4; i < (int)params.size(); i++)
-    {
-        Realname += params[i] + " ";
-    }
-
     client->second.setUsername(params[1]);
-    client->second.setRealname(Realname);
+    client->second.setRealname(params[4]);
     client->second.welcome();
 }

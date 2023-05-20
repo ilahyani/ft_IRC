@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/16 19:50:45 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 21:20:26 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 bool check_channel_name(std::string channel)
 {
     std::string invalidChars = " ,:;-?!&%\\/()[]{}\"'~^$#*";
-
     if (channel[0] != '#')
         return false;
-    
     for (int i = 1; i < (int)channel.length(); i++)
     {
         if (invalidChars.find(channel[i]) != std::string::npos)
@@ -28,83 +26,82 @@ bool check_channel_name(std::string channel)
     return true;
 }
 
-void    send_to_clients(Channels *ch, client c)
+void server::send_to_clients(Channels *ch, client c, std::string cmd)
 {
     int i = 0;
-    std::vector<client> clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + " JOIN :" + ch->getName() + "\n";
-    client owner = ch->getOwner();
+    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
+    std::string message = ":" + c.get_format() + " " + cmd + " :" + ch->getName() + "\n";
     while (i < (int)clients.size())
     {
-        send(clients[i].getsocket(), message.c_str(), message.length(), 0);
+        send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
         i++;
     }
-    send(owner.getsocket(), message.c_str(), message.length(), 0);
 }
 
 std::string getClientsChannel(Channels *ch)
 {
     std::string str;
-    std::vector<client> clients = ch->getMembers();
-
+    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
 
     int i = clients.size() - 1;
     while (i >= 0)
     {
-        str += (clients[i].getNickname() + " ");
+        if (clients[i].second == OPERATOR)
+            str += ("@" + clients[i].first.getNickname() + " ");
+        else
+            str += (clients[i].first.getNickname() + " ");
         i--;
     }
-    str += ("@" + ch->getOwnerNickname());
-    
     return str;
 }
 
-void    print_infos_after_join(std::string clients_of_channel, client &client, std::string channel)
+void    print_infos_after_join(std::string clients_of_channel, client &client, Channels *channel)
 {
-    client.response("JOIN :" + channel);
-    client.responsefromServer(RPL_NAMREPLY(client.getNickname(), channel, clients_of_channel));
-    client.responsefromServer(RPL_ENDOFNAMES(client.getNickname(), channel));
-    
-    // client.print(":" + client.getHostname() + " " + );
-    // client.print(":" + client.getHostname() + " " + RPL_ENDOFNAMES(client.getNickname(), channel));
+    client.response("JOIN :" + channel->getName());
+    if (!channel->geTopic().empty())
+        client.responsefromServer(RPL_TOPIC(client.getNickname(), channel->getName(), channel->geTopic()));
+    client.responsefromServer(RPL_NAMREPLY(client.getNickname(), channel->getName(), clients_of_channel));
+    client.responsefromServer(RPL_ENDOFNAMES(client.getNickname(), channel->getName()));    
 }
 
-void server::join_to_channel(std::string channel, std::string key, client &client)
+void server::join_to_channel(std::string channel, std::string key, client &cl)
 {
     Channels *ch = getChannel(channel);
     if (ch != NULL && ch->getName() == channel){
-        if (client.getNickname() != ch->getOwnerNickname())
+        if (!checkUserIsInChannel(cl, ch))
         {
             if (ch->isProtected)
             {
                 if (key != ch->getKey())
                 {
-                    client.response(ERR_BADCHANNELKEY(client.getNickname()));
+                    cl.response(ERR_BADCHANNELKEY(cl.getNickname()));
                     return ;
                 }
-                send_to_clients(ch, client);
-                ch->addMember(client, true);
-                print_infos_after_join(getClientsChannel(ch), client, channel);
+                send_to_clients(ch, cl, "JOIN");
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
             else if (!ch->isProtected && key.empty())
             {
-                send_to_clients(ch, client);
-                ch->addMember(client, true);
-                print_infos_after_join(getClientsChannel(ch), client, channel);
+                send_to_clients(ch, cl, "JOIN");
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
         }
         else
         {
-            client.response(ERR_USERONCHANNEL(client.getNickname(), ch->getName()));
+            cl.response(ERR_USERONCHANNEL(cl.getNickname(), ch->getName()));
             return ;
         }
     }
     else {
         if (!key.empty())
-            _Channels.push_back(Channels(channel, key, client));
+            _Channels.push_back(Channels(channel, key, cl));
         else
-            _Channels.push_back(Channels(channel, client));
-            print_infos_after_join("@" + client.getNickname(), client, channel);
+            _Channels.push_back(Channels(channel, cl));
+        cl.response("JOIN :" + channel);
+        cl.responsefromServer(RPL_NAMREPLY(cl.getNickname(), channel, "@" + cl.getNickname()));
+        cl.responsefromServer(RPL_ENDOFNAMES(cl.getNickname(), channel));
     }
 }
 
@@ -127,4 +124,5 @@ void server::join(std::vector<std::string> params, std::map<int, client>::iterat
         key = params[2];
     
     join_to_channel(params[1], key, c->second);
+    
 }

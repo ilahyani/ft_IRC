@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/16 19:31:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 21:21:20 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class server {
         ~server();
         std::string getPasswd();
         void setPasswd();
-        int getPort();
+        int  getPort();
         void setPort();
         bool startServ();
         void addNewClient();
@@ -56,14 +56,12 @@ class server {
         Channels*   getChannel(std::string channel_name);
         void        send_message_to_channel(std::string user, std::string message, client client);
         void        sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
-        bool        check_client_in_channel(client, Channels*);
-
-        void    responsefromServer(std::string str, client c);
-        void    send_msg_to_all_users(Channels *ch, std::string msg, client c);
-
+        void        responsefromServer(std::string str, client c);
+        void        send_msg_to_all_users(Channels *ch, std::string msg, client c);
+        void        send_to_clients(Channels *ch, client c, std::string cmd);
+        bool        checkUserIsInChannel(client client, Channels *ch);
 
         /* COMMANDS */
-        
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);
         void nick(std::vector<std::string> params, std::map<int, client>::iterator client);
         void user(std::vector<std::string> params, std::map<int, client>::iterator client);
@@ -77,7 +75,7 @@ class server {
         void names(std::vector<std::string> params, std::map<int, client>::iterator client);
         void list(std::vector<std::string> params, std::map<int, client>::iterator client);
         void invite(std::vector<std::string> params, std::map<int, client>::iterator client);
-        void mod(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void mode(std::vector<std::string> params, std::map<int, client>::iterator client);
         void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
 };
 

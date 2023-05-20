@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:18:50 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/16 19:24:44 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:08:05 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,15 @@ void server::send_message_to_channel(std::string channel, std::string message, c
         c.response(ERR_NOSUCHCHANNEL(c.getNickname(), channel));
         return ;
     }
-
-    std::vector<client> members = ch->getMembers();
+    std::vector<std::pair<client, ROLE> > members = ch->getMembers();
     for (int i = 0; i < (int)members.size(); i++)
     {
-        if (members[i].getNickname() == c.getNickname())
+        if (members[i].first.getNickname() == c.getNickname())
             i++;
         if ((int)members.size() == i)
             break;
-        sendToClient(members[i].getNickname(), channel, message, c, "PRIVMSG");
+        sendToClient(members[i].first.getNickname(), channel, message, c, "PRIVMSG");
     }
-    if (c.getNickname() != ch->getOwnerNickname())
-        sendToClient(ch->getOwnerNickname(), channel, message, c, "PRIVMSG");
 }
 
 void server::privmsg(std::vector<std::string> params, std::map<int, client>::iterator client) {
