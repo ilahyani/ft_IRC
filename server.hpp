@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 21:21:20 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 22:59:58 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ class server {
         server(int port, std::string passwd);
         ~server();
         std::string getPasswd();
-        void setPasswd();
-        int  getPort();
-        void setPort();
-        bool startServ();
-        void addNewClient();
-        void checkConnectedClients();
-        void parseDataAndRespond(size_t pos);
-        bool HasError(std::vector<std::string> cmd);
-        void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
-
+        void        setPasswd();
+        int         getPort();
+        void        setPort();
+        bool        startServ();
+        void        addNewClient();
+        void        checkConnectedClients();
+        void        parseDataAndRespond(size_t pos);
+        bool        HasError(std::vector<std::string> cmd);
+        void        respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
         bool        Check_client(std::string Nick);
         client*     get_client(std::string nick);
         void        send_message_to_user(std::string user, std::string message, client client);

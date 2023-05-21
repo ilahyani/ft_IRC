@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 02:48:20 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 04:27:55 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,17 @@
 #define RPL_NOTOPIC(nick, ch)           "331 " + nick + " " + ch + " :No topic is set"
 
 #define ERR_UNKNOWNMODE(nick, char)     "472 " + nick + " " + char + " :is unknown mode char to me"
+#define ERR_CHANNELISFULL(nick, ch)     "471 " + nick + " " + ch + " :Cannot join channel (+l)"
+#define ERR_INVITEONLYCHAN(nick, ch)    "473 " + nick + " " + ch + " :Cannot join channel (+i)"
 
 class client {
-    int				        _socket;
-    std::string		        _passwd;
-    std::string		        _hostname;
-    std::string		        _username;
-    std::string		        _realname;
+    int		        _socket;
+    std::string     _passwd;
+    std::string     _hostname;
+    std::string     _username;
+    std::string     _realname;
+    std::string     _nickname;
     public:
-        std::string		_nickname;
         bool            isOpreator;
         bool            isGuest;
         bool            isRegistered;

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 20:13:15 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 03:49:56 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,30 @@ enum ROLE { OPERATOR, MEMBER };
 
 class Channels
 {
-    std::string             _channelName;
-    std::string             _channelTopic;
-    std::string             _channelKey;
-    int                     _channelLimit;
-    
-    // std::vector<client>     _channelOperators;
-    // std::vector<client>     _channelMembers;
-    // client                  _channelOwner;
-    
+    std::string _channelName;
+    std::string _channelTopic;
+    std::string _channelKey;
+    int         _channelLimit;
     std::vector<std::pair<client, ROLE> > _Members;
+    
     public:
+        bool isProtected;
+        bool inviteOnly;
+
         Channels();
         Channels(std::string name, std::string key, client& owner);
         Channels(std::string name, client& owner);
         ~Channels();
-
-        bool                            isProtected;
-        bool                            inviteOnly;
-
-        const std::string&              getName();
-        void                            setName(std::string name);
-        const std::string&              getKey();
-        void                            setKey(std::string key);
-        const std::string&              geTopic();
-        void                            setTopic(std::string topic);
-        const std::vector<std::pair<client, ROLE> >&  getMembers();
-        void                            addMember(client& , ROLE);
-        const int&                      getLimit();
-        void                            setLimit(int);
+        const std::string&  getName();
+        const std::string&  getKey();
+        const std::string&  geTopic();
+        const int&          getLimit();
+        void                setName(std::string name);
+        void                setKey(std::string key);
+        void                setTopic(std::string topic);
+        void                setLimit(int);
+        void                addMember(client& , ROLE);
+        const std::vector<std::pair<client, ROLE> >& getMembers();
         // void                            removeMember(client& member);
         // bool                            checkKey(std::string key);
 };

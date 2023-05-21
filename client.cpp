@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 02:48:17 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 22:54:59 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ client:: client(int socket) : _socket(socket) {
 
 client::~client() {}
 
-const int&         client::getsocket() {
+const int& client::getsocket() {
     return _socket;
 }
 
@@ -60,30 +60,25 @@ void client::setHostname(std::string hostName) {
    _hostname = hostName;
 }
 
-std::string client::get_format()
-{
+std::string client::get_format(){
     return client::getNickname() + "!" + client::getUsername() + "@" + client::getHostname() + " ";
 }
 
-void client::response(std::string str)
-{
+void client::response(std::string str){
     print(":" + get_format() + str);
 }
 
-void client::responsefromServer(std::string str)
-{
+void client::responsefromServer(std::string str){
     print(":" + getHostname() + " " + str);
 }
 
-void client::print(std::string str)
-{
+void client::print(std::string str){
     std::string buff = str + "\n";
     if (send(_socket, buff.c_str(), buff.length(), 0) < 0)
         throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
 }
 
-void client::welcome()
-{
+void client::welcome(){
     if (isGuest && !client::getNickname().empty() && !client::getRealname().empty() && !client::getUsername().empty())
     {
         client::isGuest = false;

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/20 21:20:26 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 04:41:47 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void server::send_to_clients(Channels *ch, client c, std::string cmd)
 {
     int i = 0;
     std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + " " + cmd + " :" + ch->getName() + "\n";
+    std::string message = ":" + c.get_format() + cmd + "\n";
     while (i < (int)clients.size())
     {
         send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
@@ -70,6 +70,11 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
     if (ch != NULL && ch->getName() == channel){
         if (!checkUserIsInChannel(cl, ch))
         {
+            if ((int)ch->getMembers().size() == ch->getLimit())
+            {
+                cl.responsefromServer(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
+                return ;
+            }
             if (ch->isProtected)
             {
                 if (key != ch->getKey())
@@ -77,13 +82,13 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                     cl.response(ERR_BADCHANNELKEY(cl.getNickname()));
                     return ;
                 }
-                send_to_clients(ch, cl, "JOIN");
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
                 ch->addMember(cl, MEMBER);
                 print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
             else if (!ch->isProtected && key.empty())
             {
-                send_to_clients(ch, cl, "JOIN");
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
                 ch->addMember(cl, MEMBER);
                 print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
@@ -124,5 +129,4 @@ void server::join(std::vector<std::string> params, std::map<int, client>::iterat
         key = params[2];
     
     join_to_channel(params[1], key, c->second);
-    
 }

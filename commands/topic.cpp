@@ -6,25 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:07:19 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/20 21:21:42 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/20 22:54:26 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../server.hpp"
-
-// bool server::check_client_in_channel(client c, Channels* ch)
-// {
-//     std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    
-//     int i = 0;
-//     while (i < (int)clients.size())
-//     {
-//         if (c.getNickname() == clients[i].first.getNickname())
-//             return true;
-//         i++;
-//     }
-//     return false;
-// }
 
 void    server::send_msg_to_all_users(Channels *ch, std::string msg, client c)
 {
