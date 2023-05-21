@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/16 19:55:04 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 22:28:52 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
-void server::_cmdMapinit() {
+void server::_cmdMapinit()
+{
     std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mod", "bot"};
     cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mod, &server::bot};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
@@ -278,6 +279,8 @@ Channels* server::getChannel(std::string channel_name)
     }
     return NULL;
 }
+
+
 
 void    server::sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
 {

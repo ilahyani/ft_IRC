@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/16 19:31:39 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 22:49:52 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ class server {
         void invite(std::vector<std::string> params, std::map<int, client>::iterator client);
         void mod(std::vector<std::string> params, std::map<int, client>::iterator client);
         void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
+
+
+
+        /*function added by oqatim*/
+        int     findChannelByName(std::string channel_name, client client);
+        int     findClientByName(std::string nick, client client);
 };
 
 #endif

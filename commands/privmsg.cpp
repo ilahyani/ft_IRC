@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:18:50 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/16 19:24:44 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 07:52:05 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ void server::privmsg(std::vector<std::string> params, std::map<int, client>::ite
     
     if (params.size() < 3)
     {
-        client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
+        if(params[1].empty())
+            client->second.response(ERR_NORECIPIENT(client->second.getNickname(), params[0]));
+        else if (params[2].empty())
+            client->second.response(ERR_NOTEXTTOSEND(client->second.getNickname()));
+        else
+            client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
         return ;
     }
     
