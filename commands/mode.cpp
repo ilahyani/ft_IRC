@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/22 20:08:55 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/23 00:42:31 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
                     if (modes[i] == 'i' && !invit)
                     {
                         ch->inviteOnly = true;
+                        mod += 'i';
                         invit = true;
                     }
                     else if (modes[i] == 't' && !topic)
                     {
                         client->second.response("+t called");
-                        
+                        mod += 't';
                         topic = true;
                     }
                     else if (modes[i] == 'k' && !key)
@@ -59,10 +60,10 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
                             mod += 'k';
                             modeparams += params[k] + " ";
                             k++;
+                            key = true;
                         }
                         else 
                             client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE +k"));
-                        key = true;
                     }
                     else if (modes[i] == 'o' && !owner)
                     {
@@ -98,14 +99,19 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
                     {
                         if (!params[k].empty())
                         {
+                            for(int i = 0; i < params[k].size(); i++)
+                            {
+                                if (!isdigit(params[k][i]))
+                                    return ;
+                            }
                             ch->setLimit(std::stoi(params[k]));
                             mod += 'l';
                             modeparams += params[k] + " ";
                             k++;
+                            limit = true;
                         }
                         else
                             client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE +l"));
-                        limit = true;
                     }
                     else
                     {

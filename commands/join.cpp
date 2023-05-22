@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/22 01:45:47 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/23 00:20:58 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,23 +77,33 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                 cl.responsefromServer(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
                 return ;
             }
-            if (ch->isProtected)
+            if (ch->inviteOnly && ch->checkIsInvited(&cl))
             {
-                if (key != ch->getKey())
+                if (ch->isProtected)
                 {
-                    cl.response(ERR_BADCHANNELKEY(cl.getNickname()));
-                    return ;
+                    if (key != ch->getKey())
+                    {
+                        cl.response(ERR_BADCHANNELKEY(cl.getNickname()));
+                        return ;
+                    }
+                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                    ch->addMember(cl, MEMBER);
+                    print_infos_after_join(getClientsChannel(ch), cl, ch);
                 }
-                send_to_clients(ch, cl, "JOIN :" + ch->getName());
-                ch->addMember(cl, MEMBER);
-                print_infos_after_join(getClientsChannel(ch), cl, ch);
+                else if (!ch->isProtected && key.empty())
+                {
+                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                    ch->addMember(cl, MEMBER);
+                    print_infos_after_join(getClientsChannel(ch), cl, ch);
+                }
             }
-            else if (!ch->isProtected && key.empty())
+            else
             {
-                send_to_clients(ch, cl, "JOIN :" + ch->getName());
-                ch->addMember(cl, MEMBER);
-                print_infos_after_join(getClientsChannel(ch), cl, ch);
+                cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
+                return ;
             }
+                
+            
         }
         else
         {

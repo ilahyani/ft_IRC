@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 19:58:32 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 23:31:48 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,32 @@ void Channels::setLimit(int limit){
     _channelLimit = limit;
 }
 
-std::vector<std::pair<client, ROLE> >&   Channels::getMembers() {
+std::vector<std::pair<client, ROLE> >& Channels::getMembers() {
     return _Members;
 }
 
 void Channels::addMember(client& member, ROLE role) {
     _Members.push_back(std::make_pair(member, role));
+}
+
+void Channels::addToListInvite(client& member){
+    _MembersInvite.push_back(member);
+}
+
+std::vector<client>& Channels::getMembersInvite(){
+    return _MembersInvite;
+}
+
+client* Channels::checkIsInvited(client* c)
+{
+    std::vector<client>::iterator it = _MembersInvite.begin();
+    while (it != _MembersInvite.end())
+    {
+        if (it->getsocket() == c->getsocket())
+            return (&*it);
+        it++;
+    }
+    return (NULL);
 }
 
 // void    Channels::removeMember(client& member) {

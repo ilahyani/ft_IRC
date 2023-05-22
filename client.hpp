@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 19:03:31 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 23:42:04 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #define IRC_WELCOME(nick)                 "001 " + nick + " :Welcome to IRC Network"
 #define ERR_CANNOTSENDTOCHAN(nick)        "404 " + nick + " :Cannot send to channel"
 #define ERR_NOTEXTTOSEND(nick)            "412 " + nick + " :No text to send"
-#define ERR_NOSUCHNICK(nick)              "401 " + nick + " :No such nick/channel"
+#define ERR_NOSUCHNICK(nick,nick_channel) "401 " + nick + " " + nick_channel + " :No such nick/channel"
 #define ERR_BADCHANNAME(nick)             "479 " + nick + " :Invalid channel name"
 #define ERR_BADCHANNELKEY(nick)           "475 " + nick + " :Cannot join channel (+k)"
 #define ERR_USERONCHANNEL(nick, ch)       "443 " + nick + " " + ch + " :is already on channel"
@@ -40,6 +40,7 @@
 #define ERR_INVITEONLYCHAN(nick, ch)      "473 " + nick + " " + ch + " :Cannot join channel (+i)"
 #define ERR_CHANOPRIVSNEEDED(nick, ch)    "482 " + nick + " " + ch + " :You're not channel operator"
 #define ERR_USERNOTINCHANNEL(nick, ch)    "441 " + nick + " " + ch + " :They aren't on that channel"
+#define RPL_INVITING(rec, sen, ch)        "341 " + rec + " " + sen + " " + ch
 
 class client {
     int		        _socket;

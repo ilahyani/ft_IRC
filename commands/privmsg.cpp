@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:18:50 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/21 23:28:27 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 23:29:05 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void server::send_message_to_user(std::string nick, std::string message, client 
     client *cl = get_client(nick);
     if (!cl)
     {
-        c.response(ERR_NOSUCHNICK(c.getNickname()));
+        c.response(ERR_NOSUCHNICK(c.getNickname(), nick));
         return ;
     }
     sendToClient(cl->getsocket(), nick, message, c, "PRIVMSG");
