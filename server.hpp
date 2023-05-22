@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 22:59:58 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:18:15 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class server {
         std::string getPasswd();
         void        setPasswd();
         int         getPort();
+        std::vector<Channels>& getChannels();
         void        setPort();
         bool        startServ();
         void        addNewClient();
@@ -48,17 +49,17 @@ class server {
         void        parseDataAndRespond(size_t pos);
         bool        HasError(std::vector<std::string> cmd);
         void        respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
-        bool        Check_client(std::string Nick);
+        bool        Check_client(int socket);
         client*     get_client(std::string nick);
         void        send_message_to_user(std::string user, std::string message, client client);
         void        join_to_channel(std::string channel, std::string key, client& client);
         Channels*   getChannel(std::string channel_name);
         void        send_message_to_channel(std::string user, std::string message, client client);
-        void        sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
+        void        sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
         void        responsefromServer(std::string str, client c);
         void        send_msg_to_all_users(Channels *ch, std::string msg, client c);
         void        send_to_clients(Channels *ch, client c, std::string cmd);
-        bool        checkUserIsInChannel(client client, Channels *ch);
+        std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);

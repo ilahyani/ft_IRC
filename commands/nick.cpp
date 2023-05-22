@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/18 21:36:11 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:28:27 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,39 @@ bool isNicknameValid(std::string nick) {
     return true;
 }
 
-void server::nick(std::vector<std::string> params, std::map<int, client>::iterator client) {
+void server::nick(std::vector<std::string> params, std::map<int, client>::iterator cl) {
 
     if (params.size() != 2)
     {
-        client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
+        cl->second.response(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
         return ;
     }
 
     if (!isNicknameValid(params[1]))
     {
-        client->second.response(ERR_ERRONEUSNICKNAME(client->second.getNickname()));
+        cl->second.response(ERR_ERRONEUSNICKNAME(cl->second.getNickname()));
         return ;
     }
     
-    if (server::Check_client(params[1]))
+    if (get_client(params[1]))
     {
-        client->second.response(ERR_NICKNAMEINUSE(client->second.getNickname()));
+        cl->second.response(ERR_NICKNAMEINUSE(cl->second.getNickname()));
         return ;
     }
 
-    client->second.setNickname(params[1]);
-    client->second.welcome();
+    std::vector<Channels>::iterator it_chs = getChannels().begin();
+    while (it_chs != getChannels().end())
+    {
+        std::vector<std::pair<client, ROLE> >::iterator it_m = it_chs->getMembers().begin();
+        while (it_m != it_chs->getMembers().end())
+        {
+            if (it_m->first.getsocket() == cl->second.getsocket())
+                it_m->first.setNickname(params[1]);
+            it_m++;
+        }
+        it_chs++;
+    }
+
+    cl->second.setNickname(params[1]);
+    cl->second.welcome();
 }

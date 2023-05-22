@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 21:19:55 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:34:53 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,18 @@ void    server::checkConnectedClients() {
     }
 }
 
-int check_next_space(std::string token, int i)
-{
-    int j = 0;
-    while (j < (int)token.size())
-    {
-        if (token[j] == ' ' || token[j] == '\0')
-            return (i);
-        j++;
-        i++;
-    }    
-    return (i);
-}
+// int check_next_space(std::string token, int i)
+// {
+//     int j = 0;
+//     while (j < (int)token.size())
+//     {
+//         if (token[j] == ' ' || token[j] == '\0')
+//             return (i);
+//         j++;
+//         i++;
+//     }    
+//     return (i);
+// }
 
 void server::parseDataAndRespond(size_t pos) {
     std::vector<std::string>    cmdVec;
@@ -247,12 +247,16 @@ std::string server::getPasswd(){
     return _passwd;
 }
 
-bool server::Check_client(std::string nick)
+std::vector<Channels>& server::getChannels(){
+    return _Channels;
+}
+
+bool server::Check_client(int socket)
 {   
     std::map<int, client>::iterator it = _connectedClients.begin();
     for (; it != _connectedClients.end(); it++)
     {
-        if (nick == it->second.getNickname())
+        if (socket == it->second.getsocket())
             return true;
     }
     return false;
@@ -275,44 +279,32 @@ Channels* server::getChannel(std::string channel_name)
     for (; it != _Channels.end(); it++)
     {
         if (channel_name == it->getName())
-            return (&(*it));
+            return &(*it);
     }
     return NULL;
 }
 
-// Channels* server::getChannel2(std::string channel_name)
-// {
-//     std::vector<Channels>::iterator it = _Channels.begin();
-    
-//     for (; it != _Channels.end(); it++)
-//     {
-//         if (channel_name == it->getName())
-//             return (&(*it));
-//     }
-//     return NULL;
-// }
-
-void    server::sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
+void    server::sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
 {
     std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
-    if(get_client(receiver))
+    if(Check_client(receiver))
     {
-        if (send(get_client(receiver)->getsocket(), msg.c_str(), msg.length(), 0) < 0)
+        if (send(receiver, msg.c_str(), msg.length(), 0) < 0)
             throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
     }
     msg.clear();
 }
 
-bool server::checkUserIsInChannel(client c, Channels *ch)
+std::pair<client, ROLE>* server::checkUserIsInChannel(client c, Channels *ch)
 {
     std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
+    std::vector<std::pair<client, ROLE> >::iterator it = Members.begin();
 
-    int i = 0;
-    while (i < (int)Members.size())
+    while (it != Members.end())
     {
-        if (Members[i].first.getNickname() == c.getNickname())
-            return true;
-        i++;
+        if (it->first.getsocket() == c.getsocket())
+            return &*it;
+        it++;
     }
-    return false;
+    return NULL;
 }

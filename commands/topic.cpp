@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:07:19 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/20 22:54:26 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/21 23:29:22 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ void    server::send_msg_to_all_users(Channels *ch, std::string msg, client c)
     int i = 0;
     while (i < (int)clients.size())
     {
-        sendToClient(clients[i].first.getNickname(), ch->getName() , msg, c, "TOPIC");
+        sendToClient(clients[i].first.getsocket(), ch->getName() , msg, c, "TOPIC");
         i++;
     }
-    sendToClient(c.getNickname(), ch->getName() , msg, c, "TOPIC");
 }
 
 void server::topic(std::vector<std::string> params, std::map<int, client>::iterator c) {

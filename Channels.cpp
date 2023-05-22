@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/21 03:50:01 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:58:32 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Channels::setLimit(int limit){
     _channelLimit = limit;
 }
 
-const std::vector<std::pair<client, ROLE> >&   Channels::getMembers() {
+std::vector<std::pair<client, ROLE> >&   Channels::getMembers() {
     return _Members;
 }
 

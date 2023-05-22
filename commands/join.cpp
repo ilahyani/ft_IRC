@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/21 04:41:47 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/22 01:45:47 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ void    print_infos_after_join(std::string clients_of_channel, client &client, C
 void server::join_to_channel(std::string channel, std::string key, client &cl)
 {
     Channels *ch = getChannel(channel);
-    if (ch != NULL && ch->getName() == channel){
+    
+    if (ch != NULL && ch->getName() == channel)
+    {
         if (!checkUserIsInChannel(cl, ch))
         {
             if ((int)ch->getMembers().size() == ch->getLimit())
@@ -101,9 +103,13 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
     }
     else {
         if (!key.empty())
+        {
             _Channels.push_back(Channels(channel, key, cl));
+        }
         else
+        {
             _Channels.push_back(Channels(channel, cl));
+        }
         cl.response("JOIN :" + channel);
         cl.responsefromServer(RPL_NAMREPLY(cl.getNickname(), channel, "@" + cl.getNickname()));
         cl.responsefromServer(RPL_ENDOFNAMES(cl.getNickname(), channel));
@@ -117,13 +123,11 @@ void server::join(std::vector<std::string> params, std::map<int, client>::iterat
         c->second.response(ERR_NEEDMOREPARAMS(c->second.getNickname()));
         return ;
     }
-    
     if (!check_channel_name(params[1]))
     {
         c->second.response(ERR_BADCHANNAME(c->second.getNickname()));
         return ; 
     }
-
     std::string key = "";
     if (params.size() > 2)
         key = params[2];
