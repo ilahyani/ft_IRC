@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/21 22:49:52 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/22 16:13:21 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ class server {
 
         /*function added by oqatim*/
         int     findChannelByName(std::string channel_name, client client);
-        int     findClientByName(std::string nick, client client);
+        int     findClientByName(std::string nick);
+        void    sendToClient1(std::string receiver, std::string nick, std::string channel, client sender, std::string cmd);
 };
 
 #endif

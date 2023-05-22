@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/21 22:28:52 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/22 16:13:03 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,18 @@ client* server::get_client(std::string nick)
     return NULL;
 }
 
+int   server::findClientByName(std::string nick)
+{
+    // std::map<int, client>::iterator it = _connectedClients.begin();
+    std::map<int, client>::iterator it = _connectedClients.begin();
+    for (; it != _connectedClients.end(); it++)
+    {
+        if (nick == it->second.getNickname())
+            return 1;
+    }
+    return -1;
+}
+
 Channels* server::getChannel(std::string channel_name)
 {
     std::vector<Channels>::iterator it = _Channels.begin();
@@ -285,6 +297,17 @@ Channels* server::getChannel(std::string channel_name)
 void    server::sendToClient(std::string receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
 {
     std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
+    if(get_client(receiver))
+    {
+        if (send(get_client(receiver)->getsocket(), msg.c_str(), msg.length(), 0) < 0)
+            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+    }
+    msg.clear();
+}
+
+void    server::sendToClient1(std::string receiver, std::string nick, std::string channel, client sender, std::string cmd)
+{
+    std::string msg = ":" + sender.get_format() + cmd + " " + nick + " to " + channel + "\n";
     if(get_client(receiver))
     {
         if (send(get_client(receiver)->getsocket(), msg.c_str(), msg.length(), 0) < 0)

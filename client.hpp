@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 11:51:25 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/22 16:23:47 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ class client {
     std::string		        _nickname;
     std::string		        _username;
     std::string		        _realname;
+    std::vector<std::string> _invitedChannels;
+    
     public:
         bool            isOpreator;
         bool            isGuest;
