@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/23 00:42:31 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:32:00 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
                     {
                         if (!params[k].empty())
                         {
-                            for(int i = 0; i < params[k].size(); i++)
+                            for(int i = 0; i < (int)params[k].size(); i++)
                             {
                                 if (!isdigit(params[k][i]))
                                     return ;

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/23 00:20:58 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:04:01 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@ bool check_channel_name(std::string channel)
             return false;
     }
     return true;
-}
-
-void server::send_to_clients(Channels *ch, client c, std::string cmd)
-{
-    int i = 0;
-    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + cmd + "\n";
-    while (i < (int)clients.size())
-    {
-        send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
-        i++;
-    }
 }
 
 std::string getClientsChannel(Channels *ch)
@@ -77,33 +65,54 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                 cl.responsefromServer(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
                 return ;
             }
-            if (ch->inviteOnly && ch->checkIsInvited(&cl))
+            if (ch->isProtected && ch->inviteOnly)
             {
-                if (ch->isProtected)
-                {
-                    if (key != ch->getKey())
-                    {
-                        cl.response(ERR_BADCHANNELKEY(cl.getNickname()));
-                        return ;
-                    }
-                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
-                    ch->addMember(cl, MEMBER);
-                    print_infos_after_join(getClientsChannel(ch), cl, ch);
-                }
-                else if (!ch->isProtected && key.empty())
+                if (!key.empty() && key == ch->getKey())
                 {
                     send_to_clients(ch, cl, "JOIN :" + ch->getName());
                     ch->addMember(cl, MEMBER);
                     print_infos_after_join(getClientsChannel(ch), cl, ch);
                 }
+                else if (ch->checkIsInvited(&cl))
+                {
+                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                    ch->addMember(cl, MEMBER);
+                    print_infos_after_join(getClientsChannel(ch), cl, ch);
+                }
+                else
+                {
+                    cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
+                    return ;
+                }
             }
-            else
+            else if (ch->isProtected && !ch->inviteOnly)
             {
-                cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
-                return ;
+                if (key != ch->getKey())
+                {
+                    cl.responsefromServer(ERR_BADCHANNELKEY(cl.getNickname(), ch->getName()));
+                    return ;
+                }
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
-                
-            
+            else if (!ch->isProtected && ch->inviteOnly)
+            {
+                if (!ch->checkIsInvited(&cl))
+                {
+                    cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
+                    return ;
+                }
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
+            }
+            else if (!ch->isProtected && !ch->inviteOnly)
+            {
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
+            }
         }
         else
         {

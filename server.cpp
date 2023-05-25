@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 19:34:53 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:04:05 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,4 +307,16 @@ std::pair<client, ROLE>* server::checkUserIsInChannel(client c, Channels *ch)
         it++;
     }
     return NULL;
+}
+
+void server::send_to_clients(Channels *ch, client c, std::string cmd)
+{
+    int i = 0;
+    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
+    std::string message = ":" + c.get_format() + cmd + "\n";
+    while (i < (int)clients.size())
+    {
+        send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
+        i++;
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 23:31:48 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:25:51 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,17 @@ client* Channels::checkIsInvited(client* c)
     return (NULL);
 }
 
-// void    Channels::removeMember(client& member) {
-//     std::vector<client>::iterator it;
-
-//     it = std::find(_channelMembers.begin(), _channelMembers.end(), member);
-//     if (it != _channelMembers.end())
-//         _channelMembers.erase(it);
-//     it = std::find(_channelOperators.begin(), _channelOperators.end(), member);
-//     if (it != _channelOperators.end())
-//         _channelOperators.erase(it);
-// }
+void Channels::removeMember(client &c)
+{
+    std::vector<std::pair<client, ROLE> >::iterator it = _Members.begin();
+    
+    while (it != _Members.end())
+    {
+        if (it->first.getsocket() == c.getsocket())
+        {
+            _Members.erase(it);
+            return ;
+        }
+        it++;
+    }        
+}
