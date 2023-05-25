@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 23:42:04 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 11:18:59 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "irc.hpp"
 
+#define ERR_NORECIPIENT(nick, cmd)        "411 " + nick + " :No recipient given " + cmd
 #define ERR_NEEDMOREPARAMS(nick)          "461 " + nick + " :Not enough parameters"
 #define ERR_PASSWDMISMATCH(nick)          "464 " + nick + " :Incorrect password"
 #define ERR_UNKNOWNCOMMAND(nick, cmd)     "421 " + nick + " " + cmd + " :Unknown command"

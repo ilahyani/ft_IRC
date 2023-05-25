@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/23 00:20:58 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:56:27 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                     ch->addMember(cl, MEMBER);
                     print_infos_after_join(getClientsChannel(ch), cl, ch);
                 }
+            }
+            else if (!ch->inviteOnly && !ch->isProtected)
+            {
+                send_to_clients(ch, cl, "JOIN :" + ch->getName());
+                ch->addMember(cl, MEMBER);
+                print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
             else
             {

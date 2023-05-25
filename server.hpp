@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 20:18:15 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:27:32 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,24 @@ class server {
         void invite(std::vector<std::string> params, std::map<int, client>::iterator client);
         void mode(std::vector<std::string> params, std::map<int, client>::iterator client);
         void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
+
+
+        /*function added by oqatim*/
+        bool    checkUserIsInChannel1(client c, Channels *ch);
+        void    sendToClient1(std::string receiver, std::string nick, std::string channel, client sender, std::string cmd);
+        int     findClientByName(std::string nick, client client);
+        client* findClientByName1(std::string nick);
+        int     findChannelByName(std::string channel_name, client client);
+
+        void    send_message_to_channel_n(std::string channel, std::string message, client c);
+        void    send_message_to_user_n(std::string nick, std::string message, client c);
+        bool    check_multichannel(const std::string& str);
+        std::vector<std::string> ft_split_channels(std::string channels);
+
+
+
+
+        void whois(std::vector<std::string> params, std::map<int, client>::iterator c);
 };
 
 #endif

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 19:34:53 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:30:56 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 void server::_cmdMapinit() {
-    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot"};
-    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot};
+    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot", "whois"};
+    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot, &server::whois};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
@@ -307,4 +307,91 @@ std::pair<client, ROLE>* server::checkUserIsInChannel(client c, Channels *ch)
         it++;
     }
     return NULL;
+}
+
+/*function added by oqatim*/
+
+bool server::checkUserIsInChannel1(client c, Channels *ch)
+{
+    std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
+    std::vector<std::pair<client, ROLE> >::iterator it = Members.begin();
+
+    while (it != Members.end())
+    {
+        if (it->first.getsocket() == c.getsocket())
+            return true;
+        it++;
+    }
+    return false;
+}
+
+
+void    server::sendToClient1(std::string receiver, std::string nick, std::string channel, client sender, std::string cmd)
+{
+    std::string msg = ":" + sender.get_format() + cmd + " " + nick + " to " + channel + "\n";
+    if(get_client(receiver))
+    {
+        if (send(get_client(receiver)->getsocket(), msg.c_str(), msg.length(), 0) < 0)
+            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+    }
+    msg.clear();
+}
+
+client   *server::findClientByName1(std::string nick)
+{
+    // std::map<int, client>::iterator it = _connectedClients.begin();
+    std::map<int, client>::iterator it = _connectedClients.begin();
+    for (; it != _connectedClients.end(); it++)
+    {
+        if (nick == it->second.getNickname())
+            return &(it->second);
+    }
+    return NULL;
+}
+
+int   server::findClientByName(std::string nick, client c)
+{
+    // std::map<int, client>::iterator it = _connectedClients.begin();
+    std::map<int, client>::iterator it = _connectedClients.begin();
+    for (; it != _connectedClients.end(); it++)
+    {
+        if (nick == it->second.getNickname())
+            return 1;
+    }
+    std::cout << "No client it this server \n";
+    c.response(ERR_NOSUCHNICK(c.getNickname(), nick));
+    // client.response(ERR_NOSUCHCHANNEL(client.getNickname(), channel_name));
+    return -1;
+}
+
+int   server::findChannelByName(std::string channel_name, client client)
+{
+    std::vector<Channels>::iterator it = _Channels.begin();
+    for (; it != _Channels.end(); it++)
+    {
+        if (channel_name == it->getName())
+            return (1);
+    }
+    client.response(ERR_NOSUCHCHANNEL(client.getNickname(), channel_name));
+    return -1;
+}
+
+bool server::check_multichannel(const std::string& str)
+{
+    return str.find(',') != std::string::npos;
+}
+
+
+std::vector<std::string> server::ft_split_channels(std::string channels)
+{
+    std::vector<std::string> channelList;
+
+    std::istringstream iss(channels);
+    std::string channel;
+    
+    while (std::getline(iss, channel, ','))
+    {
+        channelList.push_back(channel);
+    }
+    return (channelList);
 }

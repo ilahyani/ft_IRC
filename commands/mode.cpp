@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/23 00:42:31 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:27:42 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
                     {
                         if (!params[k].empty())
                         {
-                            for(int i = 0; i < params[k].size(); i++)
+                            for(size_t i = 0; i < params[k].size(); i++)
                             {
                                 if (!isdigit(params[k][i]))
                                     return ;
