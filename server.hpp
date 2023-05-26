@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/22 20:18:15 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/26 22:15:12 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class server {
     std::map<std::string, cmd> _cmdMap;
     std::vector<Channels>      _Channels;
     void                       _cmdMapinit();
+    std::string                _timeCreated;
     public:
         server();
         server(int port, std::string passwd);
@@ -60,6 +61,9 @@ class server {
         void        send_msg_to_all_users(Channels *ch, std::string msg, client c);
         void        send_to_clients(Channels *ch, client c, std::string cmd);
         std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
+        void        deleteClient(client &c);
+void mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator client);
+
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);

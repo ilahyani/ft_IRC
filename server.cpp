@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 19:04:05 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:29:09 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ bool server::startServ() {
     int ov = 1;
     struct pollfd fd;
 
+    time_t now = time(0);
+    tm *gmtm = gmtime(&now);
+    _timeCreated = asctime(gmtm);
+    
+    _timeCreated.erase(std::remove(_timeCreated.begin(), _timeCreated.end(), '\n'), _timeCreated.end());
     _listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (_listenSocket < 0)
         return std::cerr << "Failed to create socket\n", false;
@@ -125,19 +130,6 @@ void    server::checkConnectedClients() {
     }
 }
 
-// int check_next_space(std::string token, int i)
-// {
-//     int j = 0;
-//     while (j < (int)token.size())
-//     {
-//         if (token[j] == ' ' || token[j] == '\0')
-//             return (i);
-//         j++;
-//         i++;
-//     }    
-//     return (i);
-// }
-
 void server::parseDataAndRespond(size_t pos) {
     std::vector<std::string>    cmdVec;
     std::string                 msg(_buff);
@@ -170,8 +162,6 @@ void server::parseDataAndRespond(size_t pos) {
                 while (str1[i] && j < (int)str1.size())
                     str[j++] = str1[i++];
                 str[j] = '\0';
-                // if (std::strlen(str) < 1)
-                //     cmdVec.push_back(":");
                 cmdVec.push_back(str);
                 break;
             }
@@ -318,5 +308,20 @@ void server::send_to_clients(Channels *ch, client c, std::string cmd)
     {
         send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
         i++;
+    }
+}
+
+void    server::deleteClient(client &c)
+{
+    std::vector<struct pollfd>::iterator it = _fdsVec.begin();
+    while (it != _fdsVec.end())
+    {
+        if (c.getsocket() == it->fd)
+        {
+            _fdsVec.erase(it);
+            close(c.getsocket());
+            return ;
+        }
+        it++;
     }
 }

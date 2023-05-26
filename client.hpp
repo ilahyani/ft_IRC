@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 19:18:10 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:33:40 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,18 @@
 
 #include "irc.hpp"
 
+#define RPL_WELCOME(nick, network, user, host)  "001 " + nick + " :Welcome to the " + network + " Network, " + nick + "!" + user + "@" + host
+#define RPL_YOURHOST(nick, server_name)         "002 " + nick + " :Your host is " + server_name
+#define RPL_CREATED(nick, date)                 "003 " + nick + " :This server was created " + date
+#define RPL_MOTD(nick, line)                    "372 " + nick + " :" + line
+#define RPL_ENDOFMOTD(nick)                     "376 " + nick + " :End of /MOTD command"
+
 #define ERR_NEEDMOREPARAMS(nick)          "461 " + nick + " :Not enough parameters"
 #define ERR_PASSWDMISMATCH(nick)          "464 " + nick + " :Incorrect password"
 #define ERR_UNKNOWNCOMMAND(nick, cmd)     "421 " + nick + " " + cmd + " :Unknown command"
 #define ERR_ERRONEUSNICKNAME(nick)        "432 " + nick + " :Erroneus nickname"
 #define ERR_NICKNAMEINUSE(nick)           "433 " + nick + " :Nickname is already in use"
 #define ERR_ALREADYREGISTRED(nick)        "462 " + nick + " :You may not reregister"
-#define IRC_WELCOME(nick)                 "001 " + nick + " :Welcome to IRC Network"
 #define ERR_CANNOTSENDTOCHAN(nick)        "404 " + nick + " :Cannot send to channel"
 #define ERR_NOTEXTTOSEND(nick)            "412 " + nick + " :No text to send"
 #define ERR_NOSUCHNICK(nick,nick_channel) "401 " + nick + " " + nick_channel + " :No such nick/channel"
@@ -72,9 +77,8 @@ class client {
         void               print(std::string str);
         void               response(std::string str);
         std::string        get_format();
-        void               welcome();
+        void               welcome(std::string);
         void               responsefromServer(std::string str);
-
 
 };
 
