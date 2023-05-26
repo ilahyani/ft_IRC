@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   names.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 11:07:30 by oqatim            #+#    #+#             */
+/*   Updated: 2023/05/26 11:07:31 by oqatim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../server.hpp"
+
 
 void server::names(std::vector<std::string> params, std::map<int, client>::iterator client) {
     (void)params;(void)client;

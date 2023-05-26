@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 14:30:56 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/26 08:22:58 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,4 +394,15 @@ std::vector<std::string> server::ft_split_channels(std::string channels)
         channelList.push_back(channel);
     }
     return (channelList);
+}
+
+bool server::isOperator(client c, Channels *ch)
+{
+    std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
+    for (size_t i = 0; i < Members.size(); i++) 
+    {
+        if (Members[i].first.getsocket() == c.getsocket() && Members[i].second == OPERATOR)
+            return true;
+    }
+    return false;
 }

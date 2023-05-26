@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 14:27:32 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/26 08:23:14 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ class server {
         void    send_message_to_user_n(std::string nick, std::string message, client c);
         bool    check_multichannel(const std::string& str);
         std::vector<std::string> ft_split_channels(std::string channels);
+        bool isOperator(client c, Channels *ch);
 
 
 

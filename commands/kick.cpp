@@ -6,37 +6,11 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 00:53:41 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/25 10:04:18 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/26 08:22:21 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../server.hpp"
-
-bool isOperator(client c, Channels *ch)
-{
-    // std::vector<std::pair<client, ROLE> > _Members = ch->getMembers();
-
-    // for (size_t i = 0; i < _Members.size(); i++) {
-    //     if (_Members[i].first == client && _Members[i].second == OPERATOR) {
-    //         return true;
-    //     }
-    // }
-    // return false;
-
-
-
-    std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
-    // std::vector<std::pair<client, ROLE> >::iterator it = Members.begin();
-
-    // while (it != Members.end())
-    for (size_t i = 0; i < Members.size(); i++) 
-    {
-        if (Members[i].first.getsocket() == c.getsocket() && Members[i].second == OPERATOR)
-            return true;
-        // it++;
-    }
-    return false;
-}
 
 // bool isMember(const client& client) {
 //     for (size_t i = 0; i < _Members.size(); i++) {
