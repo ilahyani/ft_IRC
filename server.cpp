@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/26 08:22:58 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/27 06:17:14 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,10 +319,10 @@ bool server::checkUserIsInChannel1(client c, Channels *ch)
     while (it != Members.end())
     {
         if (it->first.getsocket() == c.getsocket())
-            return true;
+            return 1;
         it++;
     }
-    return false;
+    return 0;
 }
 
 
