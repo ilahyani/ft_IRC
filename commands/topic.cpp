@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:07:19 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/21 23:29:22 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/27 19:33:38 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,12 @@ void server::topic(std::vector<std::string> params, std::map<int, client>::itera
     if (!checkUserIsInChannel(c->second, ch))
     {
         c->second.responsefromServer(ERR_NOTONCHANNEL(c->second.getNickname(), params[1]));
+        return ;
+    }
+
+    if (ch->topic && checkRoleUserInChannel(c->second, ch) == MEMBER)
+    {
+        c->second.responsefromServer(ERR_CHANOPRIVSNEEDED(c->second.getNickname(), ch->geTopic()));
         return ;
     }
 

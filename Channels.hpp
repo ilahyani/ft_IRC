@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 19:26:13 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:32:59 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ class Channels
     std::string                            _channelKey;
     int                                    _channelLimit;
     std::vector<std::pair<client, ROLE> >  _Members;
-
     std::vector<client>                    _MembersInvite;
     std::vector<client>                    _MembersBan;
-
     public:
         bool    isProtected;
         bool    inviteOnly;
+        bool    topic;
 
         Channels();
         Channels(std::string name, std::string key, client& owner);
@@ -48,6 +47,4 @@ class Channels
         client*               checkIsInvited(client* c);
         void                  addToListInvite(client& member);
         void                  removeMember(client &c);
-
-        // bool                checkKey(std::string key);
 };  

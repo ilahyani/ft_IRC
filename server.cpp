@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/26 18:29:09 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/27 19:39:29 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,4 +324,18 @@ void    server::deleteClient(client &c)
         }
         it++;
     }
+}
+
+ROLE server::checkRoleUserInChannel(client& c, Channels *ch)
+{
+    std::vector<std::pair<client, ROLE> > Members = ch->getMembers();
+    std::vector<std::pair<client, ROLE> >::iterator it = Members.begin();
+
+    while (it != Members.end())
+    {
+        if (it->first.getsocket() == c.getsocket() && it->second == OPERATOR)
+            return OPERATOR;
+        it++;
+    }
+    return MEMBER;
 }

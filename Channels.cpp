@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/25 19:25:51 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/27 19:14:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 
 Channels::Channels() {}
 
-Channels::Channels(std::string name, std::string key, client& owner)
-    : _channelName(name), _channelKey(key) {
-        addMember(owner, OPERATOR);
-        isProtected = true;
-        inviteOnly = false;
-    }
+Channels::Channels(std::string name, std::string key, client& owner): _channelName(name), _channelKey(key) {
+    addMember(owner, OPERATOR);
+    isProtected = true;
+    inviteOnly = false;
+    topic = false;
+}
 
-Channels::Channels(std::string name, client& owner)
-    : _channelName(name) {
-        addMember(owner, OPERATOR);
-        isProtected = false;
-        inviteOnly = false;
-    }
+Channels::Channels(std::string name, client& owner): _channelName(name) {
+    addMember(owner, OPERATOR);
+    isProtected = false;
+    inviteOnly = false;
+    topic = false;
+}
 
 Channels::~Channels() {}
 
@@ -94,7 +94,6 @@ client* Channels::checkIsInvited(client* c)
 void Channels::removeMember(client &c)
 {
     std::vector<std::pair<client, ROLE> >::iterator it = _Members.begin();
-    
     while (it != _Members.end())
     {
         if (it->first.getsocket() == c.getsocket())
@@ -103,5 +102,5 @@ void Channels::removeMember(client &c)
             return ;
         }
         it++;
-    }        
+    }
 }

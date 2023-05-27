@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/26 18:33:40 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/27 21:34:19 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@
 #define RPL_INVITING(rec, sen, ch)        "341 " + rec + " " + sen + " " + ch
 
 class client {
-    int		        _socket;
-    std::string     _passwd;
-    std::string     _hostname;
-    std::string     _username;
-    std::string     _realname;
-    std::string     _nickname;
+    int		       _socket;
+    std::string    _passwd;
+    std::string    _hostname;
+    std::string    _username;
+    std::string    _realname;
+    std::string    _nickname;
     public:
         bool            isOpreator;
         bool            isGuest;
@@ -79,7 +79,6 @@ class client {
         std::string        get_format();
         void               welcome(std::string);
         void               responsefromServer(std::string str);
-
 };
 
 #endif
