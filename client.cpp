@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 18:54:30 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:36:58 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ const std::string& client::getHostname() {
     return _hostname;
 }
 
+const std::string& client::getHostIp(){
+    return _hostip;
+}
+
+void client::setHostIp(std::string hostip){
+    _hostip = hostip;
+}
+
 const std::string& client::getPasswd() {
     return _passwd;
 }
@@ -62,7 +70,7 @@ void client::setHostname(std::string hostName) {
 }
 
 std::string client::get_format() {
-    return getNickname() + "!" + getUsername() + "@" + getHostname() + " ";
+    return getNickname() + "!" + getUsername() + "@" + getHostIp() + " ";
 }
 
 void client::response(std::string str) {
@@ -70,7 +78,7 @@ void client::response(std::string str) {
 }
 
 void client::responsefromServer(std::string str) {
-    print(":" + getHostname() + " " + str);
+    print(":" + getHostIp() + " " + str);
 }
 
 void client::print(std::string str) {
@@ -84,15 +92,14 @@ void client::welcome(std::string dt) {
     {
         isGuest = false;
         isRegistered = true;
-        responsefromServer(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostname()));   
-        responsefromServer(RPL_YOURHOST(getNickname(), getHostname()));
+        responsefromServer(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   
+        responsefromServer(RPL_YOURHOST(getNickname(), getHostIp()));
         responsefromServer(RPL_CREATED(getNickname(), dt));
-        responsefromServer(RPL_MOTD(getNickname(), " _____ _____   _____   _   _ ______ _________          ______  _____  _  __"));
-        responsefromServer(RPL_MOTD(getNickname(), "|_   _|  __ \\ / ____| | \\ | |  ____|__   __\\ \\        / / __ \\|  __ \\| |/ /"));
-        responsefromServer(RPL_MOTD(getNickname(), "  | | | |__) | |      |  \\| | |__     | |   \\ \\  /\\  / / |  | | |__) | ' / "));
-        responsefromServer(RPL_MOTD(getNickname(), "  | | |  _  /| |      | . ` |  __|    | |    \\ \\/  \\/ /| |  | |  _  /|  <  "));
-        responsefromServer(RPL_MOTD(getNickname(), " _| |_| | \\ \\| |____  | |\\  | |____   | |     \\  /\\  / | |__| | | \\ \\| . \\ "));
-        responsefromServer(RPL_MOTD(getNickname(), "|_____|_|  \\_\\\\_____| |_| \\_|______|  |_|      \\/  \\/   \\____/|_|  \\_\\_|\\_\\"));
+        responsefromServer(RPL_MOTD(getNickname(), " ___ ____   ____ ____  _____ ______     __"));
+        responsefromServer(RPL_MOTD(getNickname(), "|_ _|  _ \\ / ___/ ___|| ____|  _ \\ \\   / /"));
+        responsefromServer(RPL_MOTD(getNickname(), " | || |_) | |   \\___ \\|  _| | |_) \\ \\ / / "));
+        responsefromServer(RPL_MOTD(getNickname(), " | ||  _ <| |___ ___) | |___|  _ < \\ V /  "));
+        responsefromServer(RPL_MOTD(getNickname(), "|___|_| \\_\\\\____|____/|_____|_| \\_\\ \\_/   "));
         responsefromServer(RPL_MOTD(getNickname(), " "));
         responsefromServer(RPL_ENDOFMOTD(getNickname()));
     }

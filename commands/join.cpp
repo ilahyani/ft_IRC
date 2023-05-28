@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/25 19:04:01 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:30:01 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
 
 void server::join(std::vector<std::string> params, std::map<int, client>::iterator c) {
     
-    if (params.size() < 2)
+    if (params.size() == 1)
     {
         c->second.response(ERR_NEEDMOREPARAMS(c->second.getNickname()));
         return ;

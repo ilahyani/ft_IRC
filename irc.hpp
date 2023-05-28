@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/02 17:04:40 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:34:58 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 #include <vector>
 #include <map>
 #include <cstddef>
+#include <ifaddrs.h>
 
 
 #endif

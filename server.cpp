@@ -6,15 +6,15 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 19:39:29 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:38:54 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 void server::_cmdMapinit() {
-    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot"};
-    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot};
+    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot", "pong"};
+    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot, &server::pong};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
@@ -94,7 +94,7 @@ void server::addNewClient() {
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
     client newClient(_newSocket);
-    newClient.setHostname(inet_ntoa(_addr.sin_addr));
+    newClient.setHostIp(inet_ntoa(_addr.sin_addr));
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
 }
 
@@ -134,7 +134,6 @@ void server::parseDataAndRespond(size_t pos) {
     std::vector<std::string>    cmdVec;
     std::string                 msg(_buff);
     size_t                      msgEnd;
-    // char                        *token;
     char                        str[512];
 
     std::string     str1;
@@ -172,14 +171,6 @@ void server::parseDataAndRespond(size_t pos) {
             cmdVec.push_back(str);
             i++;
         }
-        
-        // token = std::strtok(str, " ");
-        // if (token && token[0] == ':')
-        //     token = std::strtok(NULL, " ");
-        // while (token != NULL) {
-        //     cmdVec.push_back(token);
-        //     token = std::strtok(NULL, " ");
-        // }
         if (!cmdVec.empty())
             std::transform(cmdVec[0].begin(), cmdVec[0].end(), cmdVec[0].begin(), ::tolower);
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.clear();

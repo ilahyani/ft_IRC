@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 19:33:05 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:38:59 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ class server {
         void invite(std::vector<std::string> params, std::map<int, client>::iterator client);
         void mode(std::vector<std::string> params, std::map<int, client>::iterator client);
         void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void pong(std::vector<std::string> params, std::map<int, client>::iterator client);
+
 };
 
 #endif

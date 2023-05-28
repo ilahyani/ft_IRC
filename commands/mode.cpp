@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/27 21:32:15 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:35:46 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,s
 }
 
 void server::mode(std::vector<std::string> params, std::map<int, client>::iterator client) {
+    if (params.size() == 2)
+        return ;
     if (params.size() < 3)
     {
         client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
