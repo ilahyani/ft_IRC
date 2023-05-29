@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/28 19:30:01 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:35:07 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 bool check_channel_name(std::string channel)
 {
     std::string invalidChars = " ,:;-?!&%\\/()[]{}\"'~^$#*";
+    if (channel[0] == '#' && channel.size() == 1)
+        return false;
     if (channel[0] != '#')
         return false;
     for (int i = 1; i < (int)channel.length(); i++)
@@ -139,12 +141,12 @@ void server::join(std::vector<std::string> params, std::map<int, client>::iterat
     
     if (params.size() == 1)
     {
-        c->second.response(ERR_NEEDMOREPARAMS(c->second.getNickname()));
+        c->second.responsefromServer(ERR_NEEDMOREPARAMS(c->second.getNickname()));
         return ;
     }
     if (!check_channel_name(params[1]))
     {
-        c->second.response(ERR_BADCHANNAME(c->second.getNickname()));
+        c->second.responsefromServer(ERR_BADCHANNAME(c->second.getNickname()));
         return ; 
     }
     std::string key = "";

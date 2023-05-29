@@ -6,13 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/28 21:38:59 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:45:55 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#ifndef SERVER_HPP
-#define SERVER_HPP
 
 #include "irc.hpp"
 #include "client.hpp"
@@ -28,6 +26,7 @@ class server {
     char                       _buff[513];
     int                        _port;
     std::string                _passwd;
+    std::string                _password_server;
     struct sockaddr_in         _addr;
     std::vector<struct pollfd> _fdsVec;
     std::map<int, client>      _connectedClients;
@@ -35,36 +34,40 @@ class server {
     std::vector<Channels>      _Channels;
     void                       _cmdMapinit();
     std::string                _timeCreated;
+    std::string                _hostAdr;
     public:
         server();
         server(int port, std::string passwd);
         ~server();
         std::string getPasswd();
-        void        setPasswd();
-        int         getPort();
+        void setPasswd();
+        int getPort();
         std::vector<Channels>& getChannels();
-        void        setPort();
-        bool        startServ();
-        void        addNewClient();
-        void        checkConnectedClients();
-        void        parseDataAndRespond(size_t pos);
-        bool        HasError(std::vector<std::string> cmd);
-        void        respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
-        bool        Check_client(int socket);
-        client*     get_client(std::string nick);
-        void        send_message_to_user(std::string user, std::string message, client client);
-        void        join_to_channel(std::string channel, std::string key, client& client);
-        Channels*   getChannel(std::string channel_name);
-        void        send_message_to_channel(std::string user, std::string message, client client);
-        void        sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
-        void        responsefromServer(std::string str, client c);
-        void        send_msg_to_all_users(Channels *ch, std::string msg, client c);
-        void        send_to_clients(Channels *ch, client c, std::string cmd);
+        void setPort();
+        std::string getHostAdresse();
+        std::string getTimeCreatedServer();
+        server* getServer();
+        bool startServ();
+        void addNewClient();
+        void checkConnectedClients();
+        void parseDataAndRespond(size_t pos);
+        bool HasError(std::vector<std::string> cmd);
+        void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
+        bool Check_client(int socket);
+        client* get_client(std::string nick);
+        void send_message_to_user(std::string user, std::string message, client client);
+        void join_to_channel(std::string channel, std::string key, client& client);
+        Channels* getChannel(std::string channel_name);
+        void send_message_to_channel(std::string user, std::string message, client client);
+        void sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
+        void responsefromServer(std::string str, client c);
+        void send_msg_to_all_users(Channels *ch, std::string msg, client c);
+        void send_to_clients(Channels *ch, client c, std::string cmd);
         std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
-        void        deleteClient(client &c);
-        void        mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator client);
-        void        mode_minus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator client);
-        ROLE        checkRoleUserInChannel(client& c, Channels *ch);
+        void deleteClient(client &c);
+        void mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator c, client* cl);
+        void mode_minus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator c, client* cl);
+        ROLE checkRoleUserInChannel(client& c, Channels *ch);
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);
@@ -83,7 +86,7 @@ class server {
         void mode(std::vector<std::string> params, std::map<int, client>::iterator client);
         void bot(std::vector<std::string> params, std::map<int, client>::iterator client);
         void pong(std::vector<std::string> params, std::map<int, client>::iterator client);
-
+        void oper(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void wallops(std::vector<std::string> params, std::map<int, client>::iterator client);
 };
 
-#endif

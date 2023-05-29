@@ -6,15 +6,21 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/28 21:38:54 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:47:27 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.hpp"
 
 void server::_cmdMapinit() {
-    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit", "topic", "names", "list", "invite", "mode", "bot", "pong"};
-    cmd cmd_ptrs[] = {&server::pass, &server::nick, &server::user, &server::join, &server::kick, &server::part, &server::notice, &server::privmsg, &server::quit, &server::topic, &server::names, &server::list, &server::invite, &server::mode, &server::bot, &server::pong};
+    std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit"
+    , "topic", "names", "list", "invite", "mode", "bot", "pong", "oper", "wallops"};
+    cmd cmd_ptrs[] = {&server::pass, &server::nick,
+     &server::user, &server::join, &server::kick, 
+     &server::part, &server::notice, &server::privmsg, 
+    &server::quit, &server::topic, &server::names, 
+    &server::list, &server::invite, &server::mode, 
+    &server::bot, &server::pong, &server::oper, &server::wallops};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
@@ -32,15 +38,32 @@ server::server(int port, std::string passwd) : _port(port), _passwd(passwd) {
 server::~server() {
 }
 
+std::string server::getHostAdresse(){
+    std::system( "ifconfig | grep 'inet ' | awk 'NR==2 {print $2}' > .log" );
+	std::stringstream ss;
+	ss << std::ifstream( ".log" ).rdbuf();
+	std::system( "rm -f .log" );
+	return(ss.str().substr( 0, ss.str().find( '\n' ) ));
+}
+
+std::string server::getTimeCreatedServer(){
+    return _timeCreated;
+}
+
+server* server::getServer(){
+    return this;
+}
+
 bool server::startServ() {
     int ov = 1;
     struct pollfd fd;
 
+    _password_server = "123456";
     time_t now = time(0);
     tm *gmtm = gmtime(&now);
     _timeCreated = asctime(gmtm);
-    
     _timeCreated.erase(std::remove(_timeCreated.begin(), _timeCreated.end(), '\n'), _timeCreated.end());
+    _hostAdr = getHostAdresse();
     _listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (_listenSocket < 0)
         return std::cerr << "Failed to create socket\n", false;

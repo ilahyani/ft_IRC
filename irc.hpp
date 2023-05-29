@@ -6,12 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/28 18:34:58 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:55:49 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRC_HPP
-#define IRC_HPP
+#pragma once
 
 #include <cstring>
 #include <unistd.h>
@@ -39,6 +38,3 @@
 #include <map>
 #include <cstddef>
 #include <ifaddrs.h>
-
-
-#endif

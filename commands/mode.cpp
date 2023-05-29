@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/28 19:35:46 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:17:34 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,169 +43,218 @@ std::string parse_modes(std::string _str)
     return modes;
 }
 
-void server::mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator client)
+void server::mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, 
+    std::vector<std::string> params, std::map<int, client>::iterator cl, client* client_mode)
 {
     execMode.push_back('+');
     for (size_t i = 1; i < modex.size(); i++)
     {
-        if (modex[i] == 'i')
+        if (modex[i] && client_mode)
         {
-            ch->inviteOnly = true;
-            execMode.push_back('i');
-        }
-        else if (modex[i] == 't')
-        {
-            ch->topic = true;
-            execMode.push_back('t');
-        }
-        else if (modex[i] == 'k')
-        {
-            if (!params[k].empty())
+            if (modex[i] == 'w')
             {
-                ch->setKey(params[k]);
-                ch->isProtected = true;
-                execMode.push_back('k');
-                modeparams += params[k] + " ";
-                k++;
+                client_mode->wallops = true;
+                execMode.push_back('w');
             }
-            else
-                client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE +k"));
-        }
-        else if (modex[i] == 'o')
-        {
-            if (!params[k].empty())
+            else if (modex[i] == 'i')
             {
-                class::client *c = get_client(params[k]);
-                if (c)
+                client_mode->isInvisible = true;
+                execMode.push_back('i');
+            }
+        }
+        else if (modex[i] && ch)
+        {
+            if (modex[i] == 'i' )
+            {
+                ch->inviteOnly = true;
+                execMode.push_back('i');
+            }
+            else if (modex[i] == 't' )
+            {
+                ch->topic = true;
+                execMode.push_back('t');
+            }
+            else if (modex[i] == 'k' )
+            {
+                if (!params[k].empty())
                 {
-                    std::pair<class::client, ROLE>* clientinchannel = checkUserIsInChannel(*c, ch);
-                    if (clientinchannel)
-                    {
-                        std::vector<std::pair<class::client, ROLE> >::iterator it = ch->getMembers().begin();
-                        while (it != ch->getMembers().end())
-                        {
-                            if (clientinchannel->first.getsocket() == it->first.getsocket())
-                                it->second = OPERATOR;
-                            it++;
-                        }
-                        execMode.push_back('o');
-                        modeparams += params[k] + " ";
-                    }
+                    ch->setKey(params[k]);
+                    ch->isProtected = true;
+                    execMode.push_back('k');
+                    modeparams += params[k] + " ";
+                    k++;
                 }
                 else
-                    client->second.responsefromServer(ERR_NOSUCHNICK(client->second.getNickname(), params[k]));
-                k++;
+                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +k"));
             }
-            else
-                client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE +o"));
-        }
-        else if (modex[i] == 'l')
-        {
-            if (!params[k].empty())
+            else if (modex[i] == 'o' )
             {
-                for(int i = 0; i < (int)params[k].size(); i++)
+                if (!params[k].empty())
                 {
-                    if (!isdigit(params[k][i]))
-                        return ;
+                    client *c = get_client(params[k]);
+                    if (c)
+                    {
+                        std::pair<client, ROLE>* clientinchannel = checkUserIsInChannel(*c, ch);
+                        if (clientinchannel)
+                        {
+                            std::vector<std::pair<client, ROLE> >::iterator it = ch->getMembers().begin();
+                            while (it != ch->getMembers().end())
+                            {
+                                if (clientinchannel->first.getsocket() == it->first.getsocket())
+                                    it->second = OPERATOR;
+                                it++;
+                            }
+                            execMode.push_back('o');
+                            modeparams += params[k] + " ";
+                        }
+                    }
+                    else
+                        cl->second.responsefromServer(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
+                    k++;
                 }
-                ch->setLimit(std::stoi(params[k]));
-                execMode.push_back('l');
-                modeparams += params[k] + " ";
-                k++;
+                else
+                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +o"));
             }
-            else
-                client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE +l"));
+            else if (modex[i] == 'l' )
+            {
+                if (!params[k].empty())
+                {
+                    for(int i = 0; i < (int)params[k].size(); i++)
+                    {
+                        if (!isdigit(params[k][i]))
+                            return ;
+                    }
+                    ch->setLimit(std::stoi(params[k]));
+                    execMode.push_back('l');
+                    modeparams += params[k] + " ";
+                    k++;
+                }
+                else
+                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +l"));
+            }
         }
         else
-            client->second.responsefromServer(ERR_UNKNOWNMODE(client->second.getNickname(), modex[i]));
+            cl->second.responsefromServer(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
     }
     if (execMode[execMode.size() - 1] == '+')
         execMode.erase(execMode.end() - 1);
 }
 
-void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator client)
+void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, 
+    std::vector<std::string> params, std::map<int, client>::iterator cl, client* client_mode)
 {
     execMode.push_back('-');
     for (size_t i = 1; i < modex.size(); i++)
     {
-        if (modex[i] == 'i')
+        if (modex[i] && client_mode)
         {
-            ch->inviteOnly = false;
-            execMode.push_back('i');
-        }
-        else if (modex[i] == 't')
-        {
-            ch->topic = false;
-            execMode.push_back('t');
-        }
-        else if (modex[i] == 'k')
-        {
-            ch->setKey("");
-            ch->isProtected = false;
-            execMode.push_back('k');
-        }
-        else if (modex[i] == 'o')
-        {
-            if (!params[k].empty())
+            if (modex[i] == 'w')
             {
-                class::client *c = get_client(params[k]);
-                if (c)
+                execMode.push_back('w');
+                client_mode->wallops = false;
+            }
+            else if (modex[i] == 'i')
+            {
+                client_mode->isInvisible = false;
+                execMode.push_back('i');
+            }
+        }
+        else if (modex[i] && ch)
+        {
+            if (modex[i] == 'i')
+            {
+                ch->inviteOnly = false;
+                execMode.push_back('i');
+            }
+            else if (modex[i] == 't')
+            {
+                ch->topic = false;
+                execMode.push_back('t');
+            }
+            else if (modex[i] == 'k')
+            {
+                ch->setKey("");
+                ch->isProtected = false;
+                execMode.push_back('k');
+            }
+            else if (modex[i] == 'o')
+            {
+                if (!params[k].empty())
                 {
-                    std::pair<class::client, ROLE>* clientinchannel = checkUserIsInChannel(*c, ch);
-                    if (clientinchannel)
+                    client *c = get_client(params[k]);
+                    if (c)
                     {
-                        std::vector<std::pair<class::client, ROLE> >::iterator it = ch->getMembers().begin();
-                        while (it != ch->getMembers().end())
+                        std::pair<client, ROLE>* clientinchannel = checkUserIsInChannel(*c, ch);
+                        if (clientinchannel)
                         {
-                            if (clientinchannel->first.getsocket() == it->first.getsocket())
-                                it->second = MEMBER;
-                            it++;
+                            std::vector<std::pair<client, ROLE> >::iterator it = ch->getMembers().begin();
+                            while (it != ch->getMembers().end())
+                            {
+                                if (clientinchannel->first.getsocket() == it->first.getsocket())
+                                    it->second = MEMBER;
+                                it++;
+                            }
+                            execMode.push_back('o');
+                            modeparams += params[k] + " ";
                         }
-                        execMode.push_back('o');
-                        modeparams += params[k] + " ";
                     }
+                    else
+                        cl->second.responsefromServer(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
+                    k++;
                 }
                 else
-                    client->second.responsefromServer(ERR_NOSUCHNICK(client->second.getNickname(), params[k]));
-                k++;
+                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE -o"));
             }
-            else
-                client->second.responsefromServer(ERR_NEEDMOREPARAMS(client->second.getNickname() + " MODE -o"));
-        }
-        else if (modex[i] == 'l')
-        {
-            ch->setLimit(500);
-            execMode.push_back('l');
+            else if (modex[i] == 'l')
+            {
+                ch->setLimit(500);
+                execMode.push_back('l');
+            }
         }
         else
-            client->second.responsefromServer(ERR_UNKNOWNMODE(client->second.getNickname(), modex[i]));
+            cl->second.responsefromServer(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
     }
     if (execMode[execMode.size() - 1] == '-')
         execMode.erase(execMode.end() - 1);
 }
 
-void server::mode(std::vector<std::string> params, std::map<int, client>::iterator client) {
+void server::mode(std::vector<std::string> params, std::map<int, client>::iterator cl) {
     if (params.size() == 2)
         return ;
     if (params.size() < 3)
     {
-        client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
+        cl->second.response(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
         return ;
     }
     std::string modes = parse_modes(params[2]);
-    Channels *ch = getChannel(params[1]);
-    if (!ch)
+    Channels* ch = NULL;
+    client* client_mode = NULL;
+    if (params[1][0] == '#' && params.size() > 1)
     {
-        client->second.responsefromServer(ERR_NOSUCHCHANNEL(client->second.getNickname(), params[1]));
-        return;   
+        ch = getChannel(params[1]);
+        if (!ch)
+        {
+            cl->second.responsefromServer(ERR_NOSUCHCHANNEL(cl->second.getNickname(), params[1]));
+            return;   
+        }
+        std::vector<std::pair<class::client, ROLE> > members = ch->getMembers();
+        if (!checkUserIsInChannel(cl->second, ch) 
+            || checkUserIsInChannel(cl->second, ch)->second != OPERATOR)
+        {
+            cl->second.responsefromServer(ERR_CHANOPRIVSNEEDED(cl->second.getNickname(), params[1]));
+            return ;
+        }
     }
-    std::vector<std::pair<class::client, ROLE> > members = ch->getMembers();
-    if (!checkUserIsInChannel(client->second, ch) 
-        || checkUserIsInChannel(client->second, ch)->second != OPERATOR)
+    else
     {
-        client->second.responsefromServer(ERR_CHANOPRIVSNEEDED(client->second.getNickname(), params[1]));
-        return ;
+        client_mode = get_client(params[1]);
+        if (client_mode && client_mode->getNickname() != cl->second.getNickname())
+        {
+            cl->second.responsefromServer(ERR_USERSDONTMATCH(cl->second.getNickname()));
+            return ;
+        }
     }
+        
     size_t pos_start = 1;
     size_t pos_m = 0;
     size_t pos_p = 0;
@@ -221,25 +270,27 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
         {
             modex = modes.substr(pos_start - 1, pos_p - (pos_start - 1));
             if (modex[0] == '+')
-                mode_plus(k, execMode, modeparams, modex, ch, params, client);
+                mode_plus(k, execMode, modeparams, modex, ch, params, cl, client_mode);
             else 
-                mode_minus(k, execMode, modeparams, modex, ch, params, client);
+                mode_minus(k, execMode, modeparams, modex, ch, params, cl, client_mode);
             pos_start = pos_p + 1;
         }
         else
         {
             modex = modes.substr(pos_start - 1, pos_m - (pos_start - 1));
             if (modex[0] == '+')
-                mode_plus(k, execMode, modeparams, modex, ch, params, client);
+                mode_plus(k, execMode, modeparams, modex, ch, params, cl, client_mode);
             else
-                mode_minus(k, execMode, modeparams, modex, ch, params, client);
+                mode_minus(k, execMode, modeparams, modex, ch, params, cl, client_mode);
             pos_start = pos_m + 1;
         }
         if (pos_start - 1 == std::string::npos)
             break;
     }
-    if (execMode[0])
-        send_to_clients(ch, client->second, "MODE " + ch->getName() + " " + execMode + " " + modeparams);
+    if (execMode[0] && client_mode)
+        cl->second.responsefromServer(RPL_UMODEIS(cl->second.getNickname(), execMode));
+    else if (execMode[0] && ch) 
+        send_to_clients(ch, cl->second, "MODE " + ch->getName() + " " + execMode + " " + modeparams);
     modeparams.clear();
     execMode.clear();
 }

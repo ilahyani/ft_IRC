@@ -6,11 +6,10 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 19:14:23 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:57:46 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
 #include "Channels.hpp"
 
 Channels::Channels() {}

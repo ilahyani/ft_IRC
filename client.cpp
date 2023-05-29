@@ -6,18 +6,18 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/28 21:36:58 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:55:53 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.hpp"
-#include "server.hpp"
 
 client::client() {
     isGuest = true;
     isOpreator = false;
     loggedIn = false;
     isRegistered = false;
+    wallops = false;
 }
 
 client:: client(int socket) : _socket(socket) {
@@ -25,6 +25,7 @@ client:: client(int socket) : _socket(socket) {
     isOpreator = false;
     loggedIn = false;
     isRegistered = false;
+    wallops = false;
 }
 
 client::~client() {}
@@ -87,19 +88,21 @@ void client::print(std::string str) {
         throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
 }
 
-void client::welcome(std::string dt) {
+void client::welcome(std::string dateCreated) {
     if (isGuest && !getNickname().empty() && !getRealname().empty() && !getUsername().empty())
     {
         isGuest = false;
         isRegistered = true;
         responsefromServer(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   
         responsefromServer(RPL_YOURHOST(getNickname(), getHostIp()));
-        responsefromServer(RPL_CREATED(getNickname(), dt));
-        responsefromServer(RPL_MOTD(getNickname(), " ___ ____   ____ ____  _____ ______     __"));
-        responsefromServer(RPL_MOTD(getNickname(), "|_ _|  _ \\ / ___/ ___|| ____|  _ \\ \\   / /"));
-        responsefromServer(RPL_MOTD(getNickname(), " | || |_) | |   \\___ \\|  _| | |_) \\ \\ / / "));
-        responsefromServer(RPL_MOTD(getNickname(), " | ||  _ <| |___ ___) | |___|  _ < \\ V /  "));
-        responsefromServer(RPL_MOTD(getNickname(), "|___|_| \\_\\\\____|____/|_____|_| \\_\\ \\_/   "));
+        responsefromServer(RPL_CREATED(getNickname(), dateCreated)); 
+        responsefromServer(RPL_MOTD(getNickname(), "- " + getHostIp() + " Message of the day"));
+        responsefromServer(RPL_MOTD(getNickname(), " ___________  _____  _____ ___________ _   _ "));
+        responsefromServer(RPL_MOTD(getNickname(), "|_   _| ___ \\/  __ \\/  ___|  ___| ___ \\ | | |"));
+        responsefromServer(RPL_MOTD(getNickname(), "  | | | |_/ /| /  \\/\\ `--.| |__ | |_/ / | | |"));
+        responsefromServer(RPL_MOTD(getNickname(), "  | | |    / | |     `--. \\  __||    /| | | |"));
+        responsefromServer(RPL_MOTD(getNickname(), " _| |_| |\\ \\ | \\__/\\/\\__/ / |___| |\\ \\\\ \\_/ /"));
+        responsefromServer(RPL_MOTD(getNickname(), " \\___/\\_| \\_| \\____/\\____/\\____/\\_| \\_|\\___/ "));
         responsefromServer(RPL_MOTD(getNickname(), " "));
         responsefromServer(RPL_ENDOFMOTD(getNickname()));
     }

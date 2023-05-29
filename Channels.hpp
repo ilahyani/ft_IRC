@@ -6,9 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 21:32:59 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:24:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #include "irc.hpp"
 #include "client.hpp"
@@ -20,10 +22,10 @@ class Channels
     std::string                            _channelName;
     std::string                            _channelTopic;
     std::string                            _channelKey;
-    int                                    _channelLimit;
     std::vector<std::pair<client, ROLE> >  _Members;
     std::vector<client>                    _MembersInvite;
     std::vector<client>                    _MembersBan;
+    int                                    _channelLimit;
     public:
         bool    isProtected;
         bool    inviteOnly;
