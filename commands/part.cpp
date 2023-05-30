@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 20:26:07 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/25 11:48:11 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 17:35:26 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 void server::part(std::vector<std::string> params, std::map<int, client>::iterator c) {
     std::cout << "PART command called\n";
     
-    if (params.size() <= 3)
+    if (params.size() == 2)
     {
         if (check_multichannel(params[1]))
         {
@@ -89,11 +89,13 @@ void server::part(std::vector<std::string> params, std::map<int, client>::iterat
                     c->second.response(ERR_NOTONCHANNEL(c->second.getNickname(), params[1]));
                 }
             }
-            
         }
     }
     else
     {
-        std::cout << "enough params \n";
+        if (params.size() < 2)
+            c->second.responsefromServer(ERR_NEEDMOREPARAMS(c->second.getNickname()));
+        else
+            return ;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/27 06:17:14 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 19:03:56 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,19 @@ Channels* server::getChannel(std::string channel_name)
 
 void    server::sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
 {
+    
     std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
+    if(Check_client(receiver))
+    {
+        if (send(receiver, msg.c_str(), msg.length(), 0) < 0)
+            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+    }
+    msg.clear();
+}
+
+void    server::sendToClient2(int receiver, std::string nick_or_channel, std::string target, std::string message, client sender, std::string cmd)
+{
+    std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " " + target + " :" + message + "\n";
     if(Check_client(receiver))
     {
         if (send(receiver, msg.c_str(), msg.length(), 0) < 0)

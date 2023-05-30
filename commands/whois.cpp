@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 11:08:08 by oqatim            #+#    #+#             */
-/*   Updated: 2023/05/26 11:08:09 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 16:36:25 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void server::whois(std::vector<std::string> params, std::map<int, client>::itera
 {
     std::cout << "WHOIS command called\n";
 
-    if(params.size() < 3)
+    if(params.size() == 2)
     {
         if (check_multichannel(params[1]))
         {
@@ -28,7 +28,6 @@ void server::whois(std::vector<std::string> params, std::map<int, client>::itera
                 {
                     client *client = findClientByName1(Nick_list[i]);
                     std::string str = client->getNickname() + " " + client->getUsername() + " " + client->getHostname() + " * : " + client->getRealname();
-                    // std::cout << "fd ---" << client->getsocket() << "\n";
                     c->second.response(str);
                 }
             }
@@ -45,7 +44,10 @@ void server::whois(std::vector<std::string> params, std::map<int, client>::itera
     }
     else
     {
-        
+        if (params.size() < 2)
+            c->second.responsefromServer(ERR_NEEDMOREPARAMS(c->second.getNickname()));
+        else
+            return ;
     }
     c->second.response(": End of /WHOIS list");
 }

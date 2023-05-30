@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:18:50 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/24 17:32:11 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 14:28:42 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void server::send_message_to_channel(std::string channel, std::string message, c
 
 void server::privmsg(std::vector<std::string> params, std::map<int, client>::iterator client) {
     
+    std::cout << "here\n";
     if (params.size() < 3)
     {
         client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
@@ -54,5 +55,8 @@ void server::privmsg(std::vector<std::string> params, std::map<int, client>::ite
     if (params[1][0] == '#')
         send_message_to_channel(params[1], params[2], client->second);
     else
+    {
+        std::cout << "message ===" << params[2] << std::endl;
         send_message_to_user(params[1], params[2], client->second);
+    }
 }

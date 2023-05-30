@@ -6,13 +6,36 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 11:07:22 by oqatim            #+#    #+#             */
-/*   Updated: 2023/05/26 11:07:23 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 22:02:02 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../server.hpp"
+
+
+void sendMessage1(int fd, std::string message)
+{
+	size_t i = 0;
+	message += "\r\n";
+	while (i != message.length())
+		i += send(fd, message.c_str(), message.length() - i, 0);
+}
+
+void cmd_Resp_Handler2(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3) /**/
+{
+    (void) cmd_resp_code;
+	std::string message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;
+   
+	sendMessage1(sender_fd, message);
+}
+
+void cmd_Resp_Handler3(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName) /**/
+{
+    (void) cmd_resp_code;
+	std::string     message = ":" + serverName + " 323 " + nickName + " :End of /LIST";
+
+	sendMessage1(sender_fd, message);
+}
 
 bool check_multichannel(const std::string& str)
 {
@@ -36,10 +59,10 @@ std::vector<std::string> ft_split_channels(std::string channels)
 
 void server::list(std::vector<std::string> params, std::map<int, client>::iterator client)
 {
-    (void)params;(void)client;
     std::cout << "LIST command called\n";
 
-
+    client->second.responsefromServer("Channel :Users Name");
+    
     int k = 0;
     if (params.size() == 1)
     {
@@ -51,20 +74,18 @@ void server::list(std::vector<std::string> params, std::map<int, client>::iterat
                 {
                     std::string Channel_name = _Channels[i].getName();
                     std::string str = "Channel " + Channel_name + " : Private";
-                    client->second.response(str);
+                    client->second.responsefromServer(str);
                 }
                 else
                 {
                     std::string Channel_name = _Channels[i].getName();
                     std::string str = "Channel " + Channel_name + " : " + _Channels[i].geTopic();
-                    client->second.response(str);
+                    // client->second.responsefromServer(str);// "prv"
+                    
+                    cmd_Resp_Handler2(client->second.getsocket(), 322, "khobza" , client->second.getNickname() , Channel_name, std::to_string(10), "prv");
                 }
 
             }
-        }
-        else
-        {
-            std::cout << "not channel in server" << std::endl;
         }
     }
     else if (params.size() == 2)
@@ -82,18 +103,16 @@ void server::list(std::vector<std::string> params, std::map<int, client>::iterat
                         {
                             std::string Channel_name = _Channels[i].getName();
                             std::string str = "Channel " + Channel_name + " : Private";
-                            client->second.response(str);
+                            // client->second.responsefromServer(str);
+                            cmd_Resp_Handler2(client->second.getsocket(), 322, "khobza" , client->second.getNickname() , Channel_name, std::to_string(10), _Channels[i].geTopic());
                         }
                         else
                         {
                             std::string Channel_name = _Channels[i].getName();
                             std::string str = "Channel " + Channel_name + " : " + _Channels[i].geTopic();
-                            client->second.response(str);
+                            // client->second.responsefromServer(str);
+                            cmd_Resp_Handler2(client->second.getsocket(), 322, "khobza" , client->second.getNickname() , Channel_name, std::to_string(10), _Channels[i].geTopic());
                         }
-                    }
-                    else
-                    {
-                        std::cout << "channel not in server" << "\n";  
                     }
                 }
             }
@@ -107,27 +126,24 @@ void server::list(std::vector<std::string> params, std::map<int, client>::iterat
                     {
                         std::string Channel_name = ch->getName();
                         std::string str = "Channel " + Channel_name + " : Private";
-                        client->second.response(str);
+                        client->second.responsefromServer(str);
                     }
                     else
                     {
                         std::string Channel_name = ch->getName();
                         std::string str = "Channel " + Channel_name + " : " + ch->geTopic();
-                        client->second.response(str);
+                        client->second.responsefromServer(str);
                     }
-                    
-                }
-                else
-                {
-                    std::cout << "channel not in server" << "\n";
+
                 }
             }
         
     }
     else
     {
-        
+        return ;
     }
-    client->second.response(": End of /LIST");
+    // cmd_Resp_Handler3(client->second.getsocket(), 323, "khobza", client->second.getNickname());
+    // client->second.responsefromServer(":End of /LIST");
        
 }

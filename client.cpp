@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/20 22:54:59 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 19:02:19 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ std::string client::get_format(){
 }
 
 void client::response(std::string str){
+    // std::string test = ":" + get_format() + str;
+    // std::cout << "test ==> " << test << std::endl;
     print(":" + get_format() + str);
 }
 

@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 11:07:57 by oqatim            #+#    #+#             */
-/*   Updated: 2023/05/26 11:08:01 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 16:33:33 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void server::quit(std::vector<std::string> params, std::map<int, client>::iterat
 {
     std::cout << "QUIT command called\n";
 
-    if (params.size() < 2)
+    if (params.size() == 2)
     {
         int clientExist = findClientByName(c->second.getNickname(), c->second);
         int fd_client = c->second.getsocket();
@@ -47,15 +47,13 @@ void server::quit(std::vector<std::string> params, std::map<int, client>::iterat
             
             std::cout << "CLIENT DISCONNECTED \n";
             close(fd_client);
-
-        }
-        else
-        {
-            
         }
     }
     else
     {
-        std::cout << "enough params \n";
+        if (params.size() < 2)
+            c->second.responsefromServer(ERR_NEEDMOREPARAMS(c->second.getNickname()));
+        else
+            return ;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/26 08:23:14 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 18:47:12 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,18 @@ class server {
         bool    check_multichannel(const std::string& str);
         std::vector<std::string> ft_split_channels(std::string channels);
         bool isOperator(client c, Channels *ch);
+        void send_message_to_channel1(std::string channel, std::string target ,std::string message, client c);
+
+        void sendToClient2(int receiver, std::string nick_or_channel, std::string target, std::string message, client sender, std::string cmd);
 
 
 
 
         void whois(std::vector<std::string> params, std::map<int, client>::iterator c);
 };
+
+void sendMessage(int sender_fd, std::string message);
+void cmd_Resp_Handler1(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3);
+
 
 #endif

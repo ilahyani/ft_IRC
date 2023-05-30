@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 01:28:06 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/27 08:34:11 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 16:41:59 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void server::invite(std::vector<std::string> params, std::map<int, client>::iter
 {
     std::string nick = params[1];
 
-    int k = 0;
     int channelExist = findChannelByName(params[2], cl->second);
     int clientExist = findClientByName(params[1], cl->second);
     if (channelExist == 1)
@@ -77,8 +76,7 @@ void server::invite(std::vector<std::string> params, std::map<int, client>::iter
         Channels *ch = getChannel(params[2]);
         if (clientExist == 1)
         {
-            // if (ch->isProtected)
-            if (k == 0)
+            if (ch->isProtected)
             {
                 if (isOperator(cl->second, ch))
                 {    
@@ -99,19 +97,46 @@ void server::invite(std::vector<std::string> params, std::map<int, client>::iter
                 }
                 else
                 {
-                    std::cout << "this nickname is not owner in this channel " << std::endl;
+                    cl->second.responsefromServer(ERR_CHANOPRIVSNEEDED(cl->second.getNickname(), ch->getName()));
+                }
+            }
+            else if (ch->inviteOnly)
+            {
+                if (isOperator(cl->second, ch))
+                {    
+                    client *c = get_client(params[1]);
+                    if (!checkUserIsInChannel1(*c, ch))
+                    {
+                        ch->addToListInvite(*c);
+                        cl->second.responsefromServer(RPL_INVITING(cl->second.getNickname(), c->getNickname(), ch->getName()));
+                        cl->second.responsefromServer("NOTICE @"+ch->getName() + " :" + cl->second.getNickname() + " invited " + c->getNickname() + " into channel " + ch->getName());
+                        sendToClient(c->getsocket(), c->getNickname(), ch->getName(), cl->second, "INVITE");  
+                    }
+                    else
+                    {
+                        cl->second.responsefromServer(ERR_USERONCHANNEL(cl->second.getNickname(), ch->getName()));
+                        return ;   
+                    }
+                    
+                }
+                else
+                {
+                    cl->second.responsefromServer(ERR_CHANOPRIVSNEEDED(cl->second.getNickname(), ch->getName()));
                 }
             }
             else
             {
-                if (checkUserIsInChannel1(cl->second, ch))
+                client *c = get_client(params[1]);
+                if (checkUserIsInChannel1(*c, ch))
                 {
-                    sendToClient1(nick, nick, ch->getName(), cl->second, "INVITE");
-                    // get_client(nick)->invitedChannels.push_back(ch->getName());  
+                    ch->addToListInvite(*c);
+                    cl->second.responsefromServer(RPL_INVITING(cl->second.getNickname(), c->getNickname(), ch->getName()));
+                    cl->second.responsefromServer("NOTICE @"+ch->getName() + " :" + cl->second.getNickname() + " invited " + c->getNickname() + " into channel " + ch->getName());
+                    sendToClient(c->getsocket(), c->getNickname(), ch->getName(), cl->second, "INVITE"); 
                 }
                 else
                 {
-                    std::cout << "this Client is already in this channel " << std::endl;
+                    cl->second.responsefromServer(ERR_USERONCHANNEL(cl->second.getNickname(), ch->getName()));
                 }
 
             }   
