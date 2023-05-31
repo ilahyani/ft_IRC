@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 20:26:07 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/25 19:24:04 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 22:27:42 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void server::part(std::vector<std::string> params, std::map<int, client>::iterat
         return ;
     }
 
-    send_to_clients(ch, client->second, "PART");
+    send_to_all_in_channel(ch, client->second, "PART " + ch->getName());
     ch->removeMember(client->second);
 }

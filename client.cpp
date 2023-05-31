@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/29 21:55:53 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 23:46:20 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ client::client() {
     isOpreator = false;
     loggedIn = false;
     isRegistered = false;
-    wallops = false;
+    wallops = true;
 }
 
 client:: client(int socket) : _socket(socket) {
@@ -25,7 +25,7 @@ client:: client(int socket) : _socket(socket) {
     isOpreator = false;
     loggedIn = false;
     isRegistered = false;
-    wallops = false;
+    wallops = true;
 }
 
 client::~client() {}
@@ -83,7 +83,7 @@ void client::responsefromServer(std::string str) {
 }
 
 void client::print(std::string str) {
-    std::string buff = str + "\n";
+    std::string buff = str + "\r\n";
     if (send(_socket, buff.c_str(), buff.length(), 0) < 0)
         throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
 }
@@ -105,6 +105,7 @@ void client::welcome(std::string dateCreated) {
         responsefromServer(RPL_MOTD(getNickname(), " \\___/\\_| \\_| \\____/\\____/\\____/\\_| \\_|\\___/ "));
         responsefromServer(RPL_MOTD(getNickname(), " "));
         responsefromServer(RPL_ENDOFMOTD(getNickname()));
+        responsefromServer(RPL_UMODEIS(getNickname(), "+w"));
     }
 }
 

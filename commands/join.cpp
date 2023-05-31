@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/29 14:35:07 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:46:12 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,8 @@ bool check_channel_name(std::string channel)
     return true;
 }
 
-std::string getClientsChannel(Channels *ch)
-{
-    std::string str;
-    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-
-    int i = clients.size() - 1;
-    while (i >= 0)
-    {
-        if (clients[i].second == OPERATOR)
-            str += ("@" + clients[i].first.getNickname() + " ");
-        else
-            str += (clients[i].first.getNickname() + " ");
-        i--;
-    }
-    return str;
-}
-
 void    print_infos_after_join(std::string clients_of_channel, client &client, Channels *channel)
 {
-    client.response("JOIN :" + channel->getName());
     if (!channel->geTopic().empty())
         client.responsefromServer(RPL_TOPIC(client.getNickname(), channel->getName(), channel->geTopic()));
     client.responsefromServer(RPL_NAMREPLY(client.getNickname(), channel->getName(), clients_of_channel));
@@ -71,14 +53,14 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
             {
                 if (!key.empty() && key == ch->getKey())
                 {
-                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
                     ch->addMember(cl, MEMBER);
+                    send_to_all_in_channel(ch, cl, "JOIN :" + ch->getName());
                     print_infos_after_join(getClientsChannel(ch), cl, ch);
                 }
                 else if (ch->checkIsInvited(&cl))
                 {
-                    send_to_clients(ch, cl, "JOIN :" + ch->getName());
                     ch->addMember(cl, MEMBER);
+                    send_to_all_in_channel(ch, cl, "JOIN :" + ch->getName());
                     print_infos_after_join(getClientsChannel(ch), cl, ch);
                 }
                 else
@@ -94,8 +76,8 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                     cl.responsefromServer(ERR_BADCHANNELKEY(cl.getNickname(), ch->getName()));
                     return ;
                 }
-                send_to_clients(ch, cl, "JOIN :" + ch->getName());
                 ch->addMember(cl, MEMBER);
+                send_to_all_in_channel(ch, cl, "JOIN :" + ch->getName());
                 print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
             else if (!ch->isProtected && ch->inviteOnly)
@@ -105,14 +87,14 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                     cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
                     return ;
                 }
-                send_to_clients(ch, cl, "JOIN :" + ch->getName());
                 ch->addMember(cl, MEMBER);
+                send_to_all_in_channel(ch, cl, "JOIN :" + ch->getName());
                 print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
             else if (!ch->isProtected && !ch->inviteOnly)
             {
-                send_to_clients(ch, cl, "JOIN :" + ch->getName());
                 ch->addMember(cl, MEMBER);
+                send_to_all_in_channel(ch, cl, "JOIN :" + ch->getName());
                 print_infos_after_join(getClientsChannel(ch), cl, ch);
             }
         }
@@ -124,13 +106,9 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
     }
     else {
         if (!key.empty())
-        {
             _Channels.push_back(Channels(channel, key, cl));
-        }
         else
-        {
             _Channels.push_back(Channels(channel, cl));
-        }
         cl.response("JOIN :" + channel);
         cl.responsefromServer(RPL_NAMREPLY(cl.getNickname(), channel, "@" + cl.getNickname()));
         cl.responsefromServer(RPL_ENDOFNAMES(cl.getNickname(), channel));

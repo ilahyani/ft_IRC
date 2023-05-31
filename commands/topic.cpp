@@ -6,23 +6,11 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 20:07:19 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/27 19:33:38 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 23:19:18 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../server.hpp"
-
-void    server::send_msg_to_all_users(Channels *ch, std::string msg, client c)
-{
-    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-
-    int i = 0;
-    while (i < (int)clients.size())
-    {
-        sendToClient(clients[i].first.getsocket(), ch->getName() , msg, c, "TOPIC");
-        i++;
-    }
-}
 
 void server::topic(std::vector<std::string> params, std::map<int, client>::iterator c) {
 
@@ -64,5 +52,5 @@ void server::topic(std::vector<std::string> params, std::map<int, client>::itera
     }
 
     ch->setTopic(params[2]);
-    send_msg_to_all_users(ch, params[2], c->second);
+    send_to_all_in_channel(ch, c->second, "TOPIC " + ch->getName() + " " + ch->geTopic());
 }

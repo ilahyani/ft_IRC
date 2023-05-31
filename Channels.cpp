@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/29 13:57:46 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 22:12:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Channels::Channels(std::string name, std::string key, client& owner): _channelNa
     isProtected = true;
     inviteOnly = false;
     topic = false;
+    setLimit(500);
 }
 
 Channels::Channels(std::string name, client& owner): _channelName(name) {
@@ -26,6 +27,7 @@ Channels::Channels(std::string name, client& owner): _channelName(name) {
     isProtected = false;
     inviteOnly = false;
     topic = false;
+    setLimit(500);
 }
 
 Channels::~Channels() {}

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 00:17:34 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 22:27:21 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,8 +289,8 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
     }
     if (execMode[0] && client_mode)
         cl->second.responsefromServer(RPL_UMODEIS(cl->second.getNickname(), execMode));
-    else if (execMode[0] && ch) 
-        send_to_clients(ch, cl->second, "MODE " + ch->getName() + " " + execMode + " " + modeparams);
+    else if (execMode[0] && ch)
+        send_to_all_in_channel(ch, cl->second, "MODE " + ch->getName() + " " + execMode + " " + modeparams);
     modeparams.clear();
     execMode.clear();
 }

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/30 00:47:27 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:46:17 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void server::addNewClient() {
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
 }
 
-void    server::checkConnectedClients() {
+void server::checkConnectedClients() {
     int recvBytes;
 
     for (size_t i = 1; i < _fdsVec.size(); i++) {
@@ -202,7 +202,7 @@ void server::parseDataAndRespond(size_t pos) {
     }
 }
 
-bool    server::HasError(std::vector<std::string> cmdVec) {
+bool server::HasError(std::vector<std::string> cmdVec) {
     // https://www.rfc-editor.org/rfc/rfc2812#section-2
     
     for (size_t i = 0; i < cmdVec.size(); i++) {
@@ -225,7 +225,7 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
             if (cmd_it != _cmdMap.end())
                 (this->*(cmd_it->second))(cmdVec, client);
             else
-                client->second.response(ERR_UNKNOWNCOMMAND(client->second.getNickname(), command));
+                client->second.responsefromServer(ERR_UNKNOWNCOMMAND(client->second.getNickname(), command));
         }
         else {
             if (cmd_it != _cmdMap.end() && (!cmd_it->first.compare("nick") || !cmd_it->first.compare("user"))) 
@@ -288,14 +288,11 @@ Channels* server::getChannel(std::string channel_name)
     return NULL;
 }
 
-void    server::sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd)
+void server::sendToClientById(int receiver, client sender, std::string message)
 {
-    std::string msg = ":" + sender.get_format() + cmd + " " + nick_or_channel + " :" + message + "\n";
+    std::string msg = ":" + sender.get_format() + message + "\r\n";
     if(Check_client(receiver))
-    {
-        if (send(receiver, msg.c_str(), msg.length(), 0) < 0)
-            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
-    }
+        send(receiver, msg.c_str(), msg.length(), 0);
     msg.clear();
 }
 
@@ -313,11 +310,24 @@ std::pair<client, ROLE>* server::checkUserIsInChannel(client c, Channels *ch)
     return NULL;
 }
 
-void server::send_to_clients(Channels *ch, client c, std::string cmd)
+void server::send_msg_to_clients_who_in_channel(Channels *ch, client c, std::string cmd)
 {
     int i = 0;
     std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + cmd + "\n";
+    std::string message = ":" + c.get_format() + cmd + "\r\n";
+    while (i < (int)clients.size())
+    {
+        if (c.getsocket() != clients[i].first.getsocket())
+            send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
+        i++;
+    }
+}
+
+void server::send_to_all_in_channel(Channels *ch, client c, std::string cmd)
+{
+    int i = 0;
+    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
+    std::string message = ":" + c.get_format() + cmd + "\r\n";
     while (i < (int)clients.size())
     {
         send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
@@ -325,7 +335,7 @@ void server::send_to_clients(Channels *ch, client c, std::string cmd)
     }
 }
 
-void    server::deleteClient(client &c)
+void server::deleteClient(client &c)
 {
     std::vector<struct pollfd>::iterator it = _fdsVec.begin();
     while (it != _fdsVec.end())
@@ -352,4 +362,21 @@ ROLE server::checkRoleUserInChannel(client& c, Channels *ch)
         it++;
     }
     return MEMBER;
+}
+
+std::string server::getClientsChannel(Channels *ch)
+{
+    std::string str;
+    std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
+
+    int i = clients.size() - 1;
+    while (i >= 0)
+    {
+        if (clients[i].second == OPERATOR)
+            str += ("@" + clients[i].first.getNickname() + " ");
+        else
+            str += (clients[i].first.getNickname() + " ");
+        i--;
+    }
+    return str;
 }

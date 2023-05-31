@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:55:55 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 00:43:45 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 22:01:48 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ void server::oper(std::vector<std::string> params, std::map<int, client>::iterat
             return ;
         }
         client->second.responsefromServer(RPL_YOUREOPER(client->second.getNickname()));
-        client->second.isOpreator = true;   
+        client->second.isOpreator = true;
     }
 }

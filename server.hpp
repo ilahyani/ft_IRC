@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/30 00:45:55 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:46:07 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,20 @@ class server {
         void join_to_channel(std::string channel, std::string key, client& client);
         Channels* getChannel(std::string channel_name);
         void send_message_to_channel(std::string user, std::string message, client client);
-        void sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
+        // void sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
         void responsefromServer(std::string str, client c);
         void send_msg_to_all_users(Channels *ch, std::string msg, client c);
-        void send_to_clients(Channels *ch, client c, std::string cmd);
+        void send_msg_to_clients_who_in_channel(Channels *ch, client c, std::string cmd);
         std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
         void deleteClient(client &c);
         void mode_plus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator c, client* cl);
         void mode_minus(int &k, std::string &execMode, std::string &modeparams,std::string modex, Channels *ch, std::vector<std::string> params, std::map<int, client>::iterator c, client* cl);
         ROLE checkRoleUserInChannel(client& c, Channels *ch);
+        void send_to_all_in_channel(Channels *ch, client c, std::string cmd);
+        void sendToClientById(int receiver, client sender, std::string message);
+
+        std::string getClientsChannel(Channels *ch);
+
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);

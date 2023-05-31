@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 01:28:06 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/23 00:26:49 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/30 23:25:03 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ void server::invite(std::vector<std::string> params, std::map<int, client>::iter
     ch->addToListInvite(*c);
     client->second.responsefromServer(RPL_INVITING(client->second.getNickname(), c->getNickname(), ch->getName()));
     client->second.responsefromServer("NOTICE @"+ch->getName() + " :" + client->second.getNickname() + " invited " + c->getNickname() + " into channel " + ch->getName());
-    sendToClient(c->getsocket(), c->getNickname(), ch->getName(), client->second, "INVITE");
+    sendToClientById(c->getsocket(), client->second, "INVITE " + c->getNickname() + " :" + ch->getName());
 }

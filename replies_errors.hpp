@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:37:29 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 00:49:55 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/05/31 01:17:19 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #define ERR_BADCHANNAME(nick)                   "479 " + nick + " :Invalid channel name"
 #define ERR_USERONCHANNEL(nick, ch)             "443 " + nick + " " + ch + " :is already on channel"
 #define RPL_NAMREPLY(nick, ch, members)         "353 " + nick + " = " + ch + " :" + members
-#define RPL_ENDOFNAMES(nick, ch)                "366 " + nick + " " + ch + " :End of NAMES list"
+#define RPL_ENDOFNAMES(nick, ch)                "366 " + nick + " " + ch + " :End of /NAMES list"
 #define ERR_NOSUCHCHANNEL(nick, ch)             "403 " + nick + " " + ch + " :No such channel"
 #define RPL_TOPIC(nick, ch, topic)              "332 " + nick + " " + ch + " :" + topic
 #define ERR_NOTONCHANNEL(nick, ch)              "442 " + nick + " " + ch + " :You're not on that channel"
@@ -47,3 +47,10 @@
 #define ERR_NOOPERHOST(nick)                    "491 " + nick + " :No O-lines for your host"
 #define ERR_USERSDONTMATCH(nick)                "502 " + nick + " :Cant change mode for other users"
 #define RPL_UMODEIS(nick, mode)                 "221 " + nick + " " + mode
+
+#define ERR_NOTEXTTOSEND(nick)                  "412 " + nick + " :No text to send"
+#define ERR_NOPRIVILEGES(nick)                  "481 " + nick + " :Permission Denied- You're not an IRC operator"
+
+#define RPL_LISTSTART(nick)                     "321 " + nick + " Channel :Users Name"
+#define RPL_LIST(nick, ch, nb, topic)           "322 " + nick + " " + ch + " " + nb + " :" + topic
+#define RPL_LISTEND(nick)                       "323 " + nick + " :End of /LIST"
