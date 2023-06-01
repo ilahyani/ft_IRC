@@ -6,12 +6,11 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 11:07:22 by oqatim            #+#    #+#             */
-/*   Updated: 2023/05/30 22:02:02 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/30 22:51:33 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../server.hpp"
-
 
 void sendMessage1(int fd, std::string message)
 {
@@ -24,7 +23,8 @@ void sendMessage1(int fd, std::string message)
 void cmd_Resp_Handler2(int sender_fd, int cmd_resp_code, std::string serverName, std::string nickName, std::string channelName, std::string arg2, std::string arg3) /**/
 {
     (void) cmd_resp_code;
-	std::string message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;
+    std::string message;
+	message = ":" + serverName + " 322 " + nickName + " " + channelName + " " + arg2 + " " + arg3;  
    
 	sendMessage1(sender_fd, message);
 }
@@ -143,7 +143,8 @@ void server::list(std::vector<std::string> params, std::map<int, client>::iterat
     {
         return ;
     }
-    // cmd_Resp_Handler3(client->second.getsocket(), 323, "khobza", client->second.getNickname());
+    // cmd_Resp_Handler2(client->second.getsocket(), 323, "khobza", client->second.getNickname());
+    cmd_Resp_Handler3(client->second.getsocket(), 323, "khobza", client->second.getNickname());
     // client->second.responsefromServer(":End of /LIST");
        
 }

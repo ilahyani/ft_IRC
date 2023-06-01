@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 11:07:57 by oqatim            #+#    #+#             */
-/*   Updated: 2023/05/30 16:33:33 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/31 19:34:09 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void server::quit(std::vector<std::string> params, std::map<int, client>::iterat
                             break;
                         }
                     }
-                      ch->getMembers().erase(channelMember);
+                    ch->getMembers().erase(channelMember);
                 }
             }
             if (itClient != _connectedClients.end())

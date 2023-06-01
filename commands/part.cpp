@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 20:26:07 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 17:35:26 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/06/01 18:27:28 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,40 @@
 //     }
 // }
 
+void    server::sendToClient3(int receiver, std::string nick_or_channel, client sender, std::string cmd)
+{
+    std::string msg = ":" + sender.get_format() + cmd + " :" + nick_or_channel + "\n";
+    if(Check_client(receiver))
+    {
+        if (send(receiver, msg.c_str(), msg.length(), 0) < 0)
+            throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+    }
+    msg.clear();
+}
+
+void server::send_message_to_channel2(std::string channel, client c)
+{
+    Channels *ch = getChannel(channel);
+    if (ch == NULL || channel != ch->getName())
+    {
+        c.response(ERR_NOSUCHCHANNEL(c.getNickname(), channel));
+        return ;
+    }
+    std::vector<std::pair<client, ROLE> > members = ch->getMembers();
+    for (int i = 0; i < (int)members.size(); i++)
+    {
+        // if (members[i].first.getsocket() == c.getsocket())
+        //     i++;
+        // if ((int)members.size() == i)
+        //     break;
+        sendToClient3(members[i].first.getsocket(), channel, c, "PART");
+    }
+}
+
 void server::part(std::vector<std::string> params, std::map<int, client>::iterator c) {
     std::cout << "PART command called\n";
     
-    if (params.size() == 2)
+    if (params.size() >= 2)
     {
         if (check_multichannel(params[1]))
         {
@@ -55,8 +85,9 @@ void server::part(std::vector<std::string> params, std::map<int, client>::iterat
                                 break;
                             }
                         }
+                        send_message_to_channel2(ch->getName(),  c->second);
                         ch->getMembers().erase(channelMember);
-                        std::cout << "user leave "  + params[1] + "\n"; 
+                        
                     }
                     else
                     {
@@ -81,8 +112,8 @@ void server::part(std::vector<std::string> params, std::map<int, client>::iterat
                             break;
                         }
                     }
+                    send_message_to_channel2(params[1],  c->second);
                     ch->getMembers().erase(channelMember);
-                    std::cout << "user leave "  + params[1] + "\n"; 
                 }
                 else
                 {

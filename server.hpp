@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/30 18:47:12 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/05/31 18:41:52 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ class server {
         void sendToClient2(int receiver, std::string nick_or_channel, std::string target, std::string message, client sender, std::string cmd);
 
 
+        void sendToClient3(int receiver, std::string nick_or_channel, client sender, std::string cmd);
+        void send_message_to_channel2(std::string channel, client c);
 
 
         void whois(std::vector<std::string> params, std::map<int, client>::iterator c);

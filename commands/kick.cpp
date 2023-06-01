@@ -6,7 +6,7 @@
 /*   By: oqatim <oqatim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 00:53:41 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 18:53:46 by oqatim           ###   ########.fr       */
+/*   Updated: 2023/06/01 16:30:34 by oqatim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,12 @@ void server::send_message_to_channel1(std::string channel, std::string receiver 
         return ;
     }
     std::vector<std::pair<client, ROLE> > members = ch->getMembers();
-    
-    std::cout << "members.size ===> " << members.size() << std::endl;
     for (int i = 0; i < (int)members.size(); i++)
     {
         if (members[i].first.getsocket() == c.getsocket())
             i++;
         if ((int)members.size() == i)
             break;
-        std::cout << "DEbug ===> 1" << std::endl;
         sendToClient2(members[i].first.getsocket(), channel, receiver, message, c, "KICK");
     }
 }
@@ -50,9 +47,10 @@ void server::kick(std::vector<std::string> params, std::map<int, client>::iterat
 
     int channelExist = findChannelByName(params[1], c->second);
     int clientExist = findClientByName(params[2], c->second);
-    
-    if (params.size() >= 2)
-    {    
+
+    if (params.size() >= 3)
+    {
+        std::cout << "number of params "<< params.size() << std::endl;
         if (channelExist == 1)
         {
             Channels *ch = getChannel(params[1]);
@@ -75,11 +73,11 @@ void server::kick(std::vector<std::string> params, std::map<int, client>::iterat
                                     break;
                                 }
                             }
-                            ch->getMembers().erase(channelMember);
-                            if (params[3].size() != 0)
-                                send_message_to_channel1(params[1], params[2] ,params[3],  c->second);
-                            else
+                            if (params.size() == 3)
                                 send_message_to_channel1(params[1], params[2] ,"no reason",  c->second);
+                            else
+                                send_message_to_channel1(params[1], params[2] ,params[3],  c->second);
+                            ch->getMembers().erase(channelMember);
                         }
                         else
                             return ;
