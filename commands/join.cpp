@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/31 00:46:12 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:40:32 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ bool check_channel_name(std::string channel)
 void    print_infos_after_join(std::string clients_of_channel, client &client, Channels *channel)
 {
     if (!channel->geTopic().empty())
-        client.responsefromServer(RPL_TOPIC(client.getNickname(), channel->getName(), channel->geTopic()));
-    client.responsefromServer(RPL_NAMREPLY(client.getNickname(), channel->getName(), clients_of_channel));
-    client.responsefromServer(RPL_ENDOFNAMES(client.getNickname(), channel->getName()));    
+        client.ServertoClientPrefix(RPL_TOPIC(client.getNickname(), channel->getName(), channel->geTopic()));
+    client.ServertoClientPrefix(RPL_NAMREPLY(client.getNickname(), channel->getName(), clients_of_channel));
+    client.ServertoClientPrefix(RPL_ENDOFNAMES(client.getNickname(), channel->getName()));    
 }
 
 void server::join_to_channel(std::string channel, std::string key, client &cl)
@@ -46,7 +46,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
         {
             if ((int)ch->getMembers().size() == ch->getLimit())
             {
-                cl.responsefromServer(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
+                cl.ServertoClientPrefix(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
                 return ;
             }
             if (ch->isProtected && ch->inviteOnly)
@@ -65,7 +65,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
                 }
                 else
                 {
-                    cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
+                    cl.ServertoClientPrefix(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
                     return ;
                 }
             }
@@ -73,7 +73,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
             {
                 if (key != ch->getKey())
                 {
-                    cl.responsefromServer(ERR_BADCHANNELKEY(cl.getNickname(), ch->getName()));
+                    cl.ServertoClientPrefix(ERR_BADCHANNELKEY(cl.getNickname(), ch->getName()));
                     return ;
                 }
                 ch->addMember(cl, MEMBER);
@@ -84,7 +84,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
             {
                 if (!ch->checkIsInvited(&cl))
                 {
-                    cl.responsefromServer(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
+                    cl.ServertoClientPrefix(ERR_INVITEONLYCHAN(cl.getNickname(), ch->getName()));
                     return ;
                 }
                 ch->addMember(cl, MEMBER);
@@ -100,7 +100,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
         }
         else
         {
-            cl.response(ERR_USERONCHANNEL(cl.getNickname(), ch->getName()));
+            cl.ServertoClientPrefix(ERR_USERONCHANNEL(cl.getNickname(), ch->getName()));
             return ;
         }
     }
@@ -109,9 +109,9 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
             _Channels.push_back(Channels(channel, key, cl));
         else
             _Channels.push_back(Channels(channel, cl));
-        cl.response("JOIN :" + channel);
-        cl.responsefromServer(RPL_NAMREPLY(cl.getNickname(), channel, "@" + cl.getNickname()));
-        cl.responsefromServer(RPL_ENDOFNAMES(cl.getNickname(), channel));
+        cl.ClienttoClientPrefix("JOIN :" + channel);
+        cl.ServertoClientPrefix(RPL_NAMREPLY(cl.getNickname(), channel, "@" + cl.getNickname()));
+        cl.ServertoClientPrefix(RPL_ENDOFNAMES(cl.getNickname(), channel));
     }
 }
 
@@ -119,12 +119,12 @@ void server::join(std::vector<std::string> params, std::map<int, client>::iterat
     
     if (params.size() == 1)
     {
-        c->second.responsefromServer(ERR_NEEDMOREPARAMS(c->second.getNickname()));
+        c->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(c->second.getNickname()));
         return ;
     }
     if (!check_channel_name(params[1]))
     {
-        c->second.responsefromServer(ERR_BADCHANNAME(c->second.getNickname()));
+        c->second.ServertoClientPrefix(ERR_BADCHANNAME(c->second.getNickname()));
         return ; 
     }
     std::string key = "";

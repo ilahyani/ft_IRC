@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:37:29 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/31 01:17:19 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 20:23:32 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@
 #define ERR_INVITEONLYCHAN(nick, ch)            "473 " + nick + " " + ch + " :Cannot join channel (+i)"
 #define ERR_BADCHANNELKEY(nick, ch)             "475 " + nick + " " + ch + " :Cannot join channel (+k)"
 #define ERR_CHANOPRIVSNEEDED(nick, ch)          "482 " + nick + " " + ch + " :You're not channel operator"
-#define ERR_USERNOTINCHANNEL(nick, ch)          "441 " + nick + " " + ch + " :They aren't on that channel"
+
+#define ERR_USERNOTINCHANNEL(nick, nick2, ch)   "441 " + nick + " " + nick2 + " " + ch + " :They aren't on that channel"
+
 #define RPL_INVITING(rec, sen, ch)              "341 " + rec + " " + sen + " " + ch
 #define ERR_NOSUCHSERVER(nick, ser)             "402 " + nick + " " + ser + " :No such server"
 #define ERR_NOORIGIN(nick)                      "409 " + nick + " :No origin specified"

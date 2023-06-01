@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/31 00:46:07 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:38:45 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ class server {
         void setPort();
         std::string getHostAdresse();
         std::string getTimeCreatedServer();
-        server* getServer();
         bool startServ();
         void addNewClient();
         void checkConnectedClients();
@@ -59,8 +58,7 @@ class server {
         void join_to_channel(std::string channel, std::string key, client& client);
         Channels* getChannel(std::string channel_name);
         void send_message_to_channel(std::string user, std::string message, client client);
-        // void sendToClient(int receiver, std::string nick_or_channel, std::string message, client sender, std::string cmd);
-        void responsefromServer(std::string str, client c);
+        // void ServertoClientPrefix(std::string str, client c);
         void send_msg_to_all_users(Channels *ch, std::string msg, client c);
         void send_msg_to_clients_who_in_channel(Channels *ch, client c, std::string cmd);
         std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
@@ -70,7 +68,6 @@ class server {
         ROLE checkRoleUserInChannel(client& c, Channels *ch);
         void send_to_all_in_channel(Channels *ch, client c, std::string cmd);
         void sendToClientById(int receiver, client sender, std::string message);
-
         std::string getClientsChannel(Channels *ch);
 
 

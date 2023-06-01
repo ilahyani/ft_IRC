@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/31 00:46:17 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:53:14 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,11 @@ std::string server::getHostAdresse(){
 	std::stringstream ss;
 	ss << std::ifstream( ".log" ).rdbuf();
 	std::system( "rm -f .log" );
-	return(ss.str().substr( 0, ss.str().find( '\n' ) ));
+	return (ss.str().substr( 0, ss.str().find( '\n' ) ));
 }
 
 std::string server::getTimeCreatedServer(){
     return _timeCreated;
-}
-
-server* server::getServer(){
-    return this;
 }
 
 bool server::startServ() {
@@ -118,6 +114,7 @@ void server::addNewClient() {
     _fdsVec.push_back(fd);
     client newClient(_newSocket);
     newClient.setHostIp(inet_ntoa(_addr.sin_addr));
+    newClient.setServerIp(_hostAdr);
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
 }
 
@@ -225,7 +222,7 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
             if (cmd_it != _cmdMap.end())
                 (this->*(cmd_it->second))(cmdVec, client);
             else
-                client->second.responsefromServer(ERR_UNKNOWNCOMMAND(client->second.getNickname(), command));
+                client->second.ServertoClientPrefix(ERR_UNKNOWNCOMMAND(client->second.getNickname(), command));
         }
         else {
             if (cmd_it != _cmdMap.end() && (!cmd_it->first.compare("nick") || !cmd_it->first.compare("user"))) 
@@ -290,7 +287,7 @@ Channels* server::getChannel(std::string channel_name)
 
 void server::sendToClientById(int receiver, client sender, std::string message)
 {
-    std::string msg = ":" + sender.get_format() + message + "\r\n";
+    std::string msg = ":" + sender.getPrefixClient() + message + "\r\n";
     if(Check_client(receiver))
         send(receiver, msg.c_str(), msg.length(), 0);
     msg.clear();
@@ -314,7 +311,7 @@ void server::send_msg_to_clients_who_in_channel(Channels *ch, client c, std::str
 {
     int i = 0;
     std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + cmd + "\r\n";
+    std::string message = ":" + c.getPrefixClient() + cmd + "\r\n";
     while (i < (int)clients.size())
     {
         if (c.getsocket() != clients[i].first.getsocket())
@@ -327,7 +324,7 @@ void server::send_to_all_in_channel(Channels *ch, client c, std::string cmd)
 {
     int i = 0;
     std::vector<std::pair<client, ROLE> > clients = ch->getMembers();
-    std::string message = ":" + c.get_format() + cmd + "\r\n";
+    std::string message = ":" + c.getPrefixClient() + cmd + "\r\n";
     while (i < (int)clients.size())
     {
         send(clients[i].first.getsocket(), message.c_str(), message.length(), 0);
@@ -380,3 +377,4 @@ std::string server::getClientsChannel(Channels *ch)
     }
     return str;
 }
+

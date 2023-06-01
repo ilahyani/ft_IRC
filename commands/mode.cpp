@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/30 22:27:21 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:40:10 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void server::mode_plus(int &k, std::string &execMode, std::string &modeparams,st
                     k++;
                 }
                 else
-                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +k"));
+                    cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +k"));
             }
             else if (modex[i] == 'o' )
             {
@@ -109,11 +109,11 @@ void server::mode_plus(int &k, std::string &execMode, std::string &modeparams,st
                         }
                     }
                     else
-                        cl->second.responsefromServer(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
+                        cl->second.ServertoClientPrefix(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
                     k++;
                 }
                 else
-                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +o"));
+                    cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +o"));
             }
             else if (modex[i] == 'l' )
             {
@@ -130,11 +130,11 @@ void server::mode_plus(int &k, std::string &execMode, std::string &modeparams,st
                     k++;
                 }
                 else
-                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +l"));
+                    cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE +l"));
             }
         }
         else
-            cl->second.responsefromServer(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
+            cl->second.ServertoClientPrefix(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
     }
     if (execMode[execMode.size() - 1] == '+')
         execMode.erase(execMode.end() - 1);
@@ -199,11 +199,11 @@ void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,s
                         }
                     }
                     else
-                        cl->second.responsefromServer(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
+                        cl->second.ServertoClientPrefix(ERR_NOSUCHNICK(cl->second.getNickname(), params[k]));
                     k++;
                 }
                 else
-                    cl->second.responsefromServer(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE -o"));
+                    cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname() + " MODE -o"));
             }
             else if (modex[i] == 'l')
             {
@@ -212,7 +212,7 @@ void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,s
             }
         }
         else
-            cl->second.responsefromServer(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
+            cl->second.ServertoClientPrefix(ERR_UNKNOWNMODE(cl->second.getNickname(), modex[i]));
     }
     if (execMode[execMode.size() - 1] == '-')
         execMode.erase(execMode.end() - 1);
@@ -223,7 +223,7 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
         return ;
     if (params.size() < 3)
     {
-        cl->second.response(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
+        cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
         return ;
     }
     std::string modes = parse_modes(params[2]);
@@ -234,14 +234,14 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
         ch = getChannel(params[1]);
         if (!ch)
         {
-            cl->second.responsefromServer(ERR_NOSUCHCHANNEL(cl->second.getNickname(), params[1]));
+            cl->second.ServertoClientPrefix(ERR_NOSUCHCHANNEL(cl->second.getNickname(), params[1]));
             return;   
         }
         std::vector<std::pair<class::client, ROLE> > members = ch->getMembers();
         if (!checkUserIsInChannel(cl->second, ch) 
             || checkUserIsInChannel(cl->second, ch)->second != OPERATOR)
         {
-            cl->second.responsefromServer(ERR_CHANOPRIVSNEEDED(cl->second.getNickname(), params[1]));
+            cl->second.ServertoClientPrefix(ERR_CHANOPRIVSNEEDED(cl->second.getNickname(), params[1]));
             return ;
         }
     }
@@ -250,7 +250,7 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
         client_mode = get_client(params[1]);
         if (client_mode && client_mode->getNickname() != cl->second.getNickname())
         {
-            cl->second.responsefromServer(ERR_USERSDONTMATCH(cl->second.getNickname()));
+            cl->second.ServertoClientPrefix(ERR_USERSDONTMATCH(cl->second.getNickname()));
             return ;
         }
     }
@@ -288,7 +288,7 @@ void server::mode(std::vector<std::string> params, std::map<int, client>::iterat
             break;
     }
     if (execMode[0] && client_mode)
-        cl->second.responsefromServer(RPL_UMODEIS(cl->second.getNickname(), execMode));
+        cl->second.ServertoClientPrefix(RPL_UMODEIS(cl->second.getNickname(), execMode));
     else if (execMode[0] && ch)
         send_to_all_in_channel(ch, cl->second, "MODE " + ch->getName() + " " + execMode + " " + modeparams);
     modeparams.clear();

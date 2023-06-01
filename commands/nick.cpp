@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/29 14:31:08 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:39:49 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ void server::nick(std::vector<std::string> params, std::map<int, client>::iterat
 
     if (params.size() != 2)
     {
-        cl->second.response(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
+        cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
         return ;
     }
 
     if (!isNicknameValid(params[1]))
     {
-        cl->second.response(ERR_ERRONEUSNICKNAME(cl->second.getNickname()));
+        cl->second.ServertoClientPrefix(ERR_ERRONEUSNICKNAME(cl->second.getNickname()));
         return ;
     }
     
     if (get_client(params[1]))
     {
-        cl->second.response(ERR_NICKNAMEINUSE(cl->second.getNickname()));
+        cl->second.ServertoClientPrefix(ERR_NICKNAMEINUSE(cl->second.getNickname()));
         return ;
     }
 

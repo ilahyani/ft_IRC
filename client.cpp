@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/30 23:46:20 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:42:10 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ const std::string& client::getUsername() {
     return _username;
 }
 
-const std::string& client::getHostname() {
-    return _hostname;
+const std::string& client::getServerIp() {
+    return _serverip;
 }
 
 const std::string& client::getHostIp(){
@@ -66,20 +66,20 @@ void client::setNickname(std::string nickname) {
     _nickname = nickname;
 }
 
-void client::setHostname(std::string hostName) {
-   _hostname = hostName;
+void client::setServerIp(std::string serverip) {
+   _serverip = serverip;
 }
 
-std::string client::get_format() {
+std::string client::getPrefixClient() {
     return getNickname() + "!" + getUsername() + "@" + getHostIp() + " ";
 }
 
-void client::response(std::string str) {
-    print(":" + get_format() + str);
+void client::ClienttoClientPrefix(std::string str) {
+    print(":" + getPrefixClient() + str);
 }
 
-void client::responsefromServer(std::string str) {
-    print(":" + getHostIp() + " " + str);
+void client::ServertoClientPrefix(std::string str) {
+    print(":" + getServerIp() + " " + str);
 }
 
 void client::print(std::string str) {
@@ -93,19 +93,19 @@ void client::welcome(std::string dateCreated) {
     {
         isGuest = false;
         isRegistered = true;
-        responsefromServer(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   
-        responsefromServer(RPL_YOURHOST(getNickname(), getHostIp()));
-        responsefromServer(RPL_CREATED(getNickname(), dateCreated)); 
-        responsefromServer(RPL_MOTD(getNickname(), "- " + getHostIp() + " Message of the day"));
-        responsefromServer(RPL_MOTD(getNickname(), " ___________  _____  _____ ___________ _   _ "));
-        responsefromServer(RPL_MOTD(getNickname(), "|_   _| ___ \\/  __ \\/  ___|  ___| ___ \\ | | |"));
-        responsefromServer(RPL_MOTD(getNickname(), "  | | | |_/ /| /  \\/\\ `--.| |__ | |_/ / | | |"));
-        responsefromServer(RPL_MOTD(getNickname(), "  | | |    / | |     `--. \\  __||    /| | | |"));
-        responsefromServer(RPL_MOTD(getNickname(), " _| |_| |\\ \\ | \\__/\\/\\__/ / |___| |\\ \\\\ \\_/ /"));
-        responsefromServer(RPL_MOTD(getNickname(), " \\___/\\_| \\_| \\____/\\____/\\____/\\_| \\_|\\___/ "));
-        responsefromServer(RPL_MOTD(getNickname(), " "));
-        responsefromServer(RPL_ENDOFMOTD(getNickname()));
-        responsefromServer(RPL_UMODEIS(getNickname(), "+w"));
+        ServertoClientPrefix(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   
+        ServertoClientPrefix(RPL_YOURHOST(getNickname(), getHostIp()));
+        ServertoClientPrefix(RPL_CREATED(getNickname(), dateCreated)); 
+        ServertoClientPrefix(RPL_MOTD(getNickname(), "- " + getHostIp() + " Message of the day"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), " ___________  _____  _____ ___________ _   _ "));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), "|_   _| ___ \\/  __ \\/  ___|  ___| ___ \\ | | |"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), "  | | | |_/ /| /  \\/\\ `--.| |__ | |_/ / | | |"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), "  | | |    / | |     `--. \\  __||    /| | | |"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), " _| |_| |\\ \\ | \\__/\\/\\__/ / |___| |\\ \\\\ \\_/ /"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), " \\___/\\_| \\_| \\____/\\____/\\____/\\_| \\_|\\___/ "));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), " "));
+        ServertoClientPrefix(RPL_ENDOFMOTD(getNickname()));
+        ServertoClientPrefix(RPL_UMODEIS(getNickname(), "+w"));
     }
 }
 

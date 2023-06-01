@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:05:23 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/05/29 14:49:08 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:39:24 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void server::user(std::vector<std::string> params, std::map<int, client>::iterat
     
     if (params.size() < 5)
     {
-        client->second.response(ERR_NEEDMOREPARAMS(client->second.getNickname()));
+        client->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(client->second.getNickname()));
         return ;
     }
     if (client->second.isRegistered)
     {
-        client->second.response(ERR_ALREADYREGISTRED(client->second.getNickname()));
+        client->second.ServertoClientPrefix(ERR_ALREADYREGISTRED(client->second.getNickname()));
         return ;
     }
     client->second.setUsername(params[1]);
