@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/02 16:49:27 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 18:16:35 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ bool server::startServ() {
     fd.fd = _listenSocket;
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
-    std::cout << "Welcome to IRC Server\n";
+    std::cout << "Starting the IRC Server...\n";
     while (true) {
         int rv = poll(&_fdsVec[0], _fdsVec.size(), -1);
         if (rv < 0)
@@ -101,17 +101,17 @@ bool server::startServ() {
 void server::addNewClient() {
     struct pollfd fd;
     socklen_t addr_len = sizeof(_addr);
+    std::string buff = "Welcome to the server\nPlease Login to the server using the PASS command\n";
 
     _newSocket = accept(_listenSocket, (struct sockaddr *)&_addr, &addr_len);
-    if (_newSocket < 0) {
+    if (_newSocket < 0)
+    {
         std::cerr << "Failed to accept connection\n";
         return;
     }
-    std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
-
-
+    if (send(_newSocket, buff.c_str(), buff.length(), 0) < 0)
+        throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
     std::string localhostcheck(inet_ntoa(_addr.sin_addr));
-    
     fd.fd = _newSocket;
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
@@ -202,21 +202,21 @@ void server::parseDataAndRespond(size_t pos) {
         if (!cmdVec.empty())
             std::transform(cmdVec[0].begin(), cmdVec[0].end(), cmdVec[0].begin(), ::tolower);
         _connectedClients.at(_fdsVec.at(pos).fd).clientBuff.clear();
-        if (!HasError(cmdVec))
-            respondToClient(cmdVec, _connectedClients.find(_fdsVec.at(pos).fd));
+        // if (!HasError(cmdVec))
+        respondToClient(cmdVec, _connectedClients.find(_fdsVec.at(pos).fd));
     }
 }
 
-bool server::HasError(std::vector<std::string> cmdVec) {
-    // https://www.rfc-editor.org/rfc/rfc2812#section-2
-    
-    for (size_t i = 0; i < cmdVec.size(); i++) {
-        std::cout << cmdVec[i] << " ";
-        if (i == cmdVec.size() - 1)
-            std::cout << std::endl;
-    }
-    return false;
-}
+// bool server::HasError(std::vector<std::string> cmdVec) {
+//     // https://www.rfc-editor.org/rfc/rfc2812#section-2
+
+//     for (size_t i = 0; i < cmdVec.size(); i++) {
+//         std::cout << cmdVec[i] << " ";
+//         if (i == cmdVec.size() - 1)
+//             std::cout << std::endl;
+//     }
+//     return false;
+// }
 
 void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, client>::iterator client) {
     std::map<std::string, cmd>::iterator cmd_it;
@@ -241,14 +241,21 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
                     server::user(cmdVec, client);
             }
             else
-                std::cout << "Please register to the server using NICK and USER commands\n";
+            {
+                if (send(_newSocket, "Please register to the server using NICK and USER commands\n", 60, 0) < 0)
+                    throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+            }
         }
     }
     else {
         if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass"))
             server::pass(cmdVec, client);
         else
-            std::cout << "Please Login to the server using the PASS command\n";
+        {
+            // std::cout << "Please Login to the server using the PASS command\n";
+            if (send(_newSocket, "Please Login to the server using the PASS command\n", 51, 0) < 0)
+                throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
+        }
     }
 }
 
