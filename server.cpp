@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/01 23:53:14 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:49:27 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void server::_cmdMapinit() {
     std::string cmd_strings[] = {"pass", "nick", "user", "join", "kick", "part", "notice", "privmsg", "quit"
-    , "topic", "names", "list", "invite", "mode", "bot", "pong", "oper", "wallops"};
+    , "topic", "names", "list", "invite", "mode", "bot", "pong", "oper", "wallops", "whois"};
     cmd cmd_ptrs[] = {&server::pass, &server::nick,
      &server::user, &server::join, &server::kick, 
      &server::part, &server::notice, &server::privmsg, 
     &server::quit, &server::topic, &server::names, 
     &server::list, &server::invite, &server::mode, 
-    &server::bot, &server::pong, &server::oper, &server::wallops};
+    &server::bot, &server::pong, &server::oper, &server::wallops, &server::whois};
     int num_cmds = sizeof(cmd_ptrs) / sizeof(cmd);
 
     for (int i = 0; i < num_cmds; i++)
@@ -108,13 +108,21 @@ void server::addNewClient() {
         return;
     }
     std::cout << "Connection Accepted\nPlease Login to the server using the PASS command\n";
+
+
+    std::string localhostcheck(inet_ntoa(_addr.sin_addr));
     
     fd.fd = _newSocket;
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
     client newClient(_newSocket);
-    newClient.setHostIp(inet_ntoa(_addr.sin_addr));
+
+    if (localhostcheck == "127.0.0.1")
+        localhostcheck = _hostAdr;
+    newClient.setHostIp(localhostcheck);
+    
     newClient.setServerIp(_hostAdr);
+    newClient.setJoiningTime(std::time(NULL));
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
 }
 

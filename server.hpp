@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/01 23:38:45 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:55:49 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,8 @@ class server {
         void respondToClient(std::vector<std::string> cmd, std::map<int, client>::iterator client);
         bool Check_client(int socket);
         client* get_client(std::string nick);
-        void send_message_to_user(std::string user, std::string message, client client);
         void join_to_channel(std::string channel, std::string key, client& client);
         Channels* getChannel(std::string channel_name);
-        void send_message_to_channel(std::string user, std::string message, client client);
-        // void ServertoClientPrefix(std::string str, client c);
         void send_msg_to_all_users(Channels *ch, std::string msg, client c);
         void send_msg_to_clients_who_in_channel(Channels *ch, client c, std::string cmd);
         std::pair<client, ROLE>* checkUserIsInChannel(client c, Channels *ch);
@@ -69,7 +66,6 @@ class server {
         void send_to_all_in_channel(Channels *ch, client c, std::string cmd);
         void sendToClientById(int receiver, client sender, std::string message);
         std::string getClientsChannel(Channels *ch);
-
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);
@@ -90,5 +86,7 @@ class server {
         void pong(std::vector<std::string> params, std::map<int, client>::iterator client);
         void oper(std::vector<std::string> params, std::map<int, client>::iterator client);
         void wallops(std::vector<std::string> params, std::map<int, client>::iterator client);
+        void whois(std::vector<std::string> params, std::map<int, client>::iterator client);
+
 };
 

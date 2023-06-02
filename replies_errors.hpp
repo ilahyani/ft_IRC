@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:37:29 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 20:23:32 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:56:20 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@
 #define ERR_NOTEXTTOSEND(nick)                  "412 " + nick + " :No text to send"
 #define ERR_NOPRIVILEGES(nick)                  "481 " + nick + " :Permission Denied- You're not an IRC operator"
 
+#define ERR_NONICKNAMEGIVEN(nick)               "431 " + nick + " :No nickname given"
+
+//LIST
 #define RPL_LISTSTART(nick)                     "321 " + nick + " Channel :Users Name"
 #define RPL_LIST(nick, ch, nb, topic)           "322 " + nick + " " + ch + " " + nb + " :" + topic
 #define RPL_LISTEND(nick)                       "323 " + nick + " :End of /LIST"
+
+//WHOIS
+#define RPL_WHOISUSER(nick1,nick2,user,host,realname)  "311 " + nick1 + " " + nick2 + " " + user + " " + host + " * :" + realname
+#define RPL_WHOISCHANNELS(nick1,nick2, channels)       "319 " + nick1 + " " + nick2 + " :" + channels
+#define RPL_WHOISSERVER(nick1, nick2, ser, infos)      "312 " + nick1 + " " + nick2 + " " + ser + " :" + infos
+#define RPL_WHOISIDLE(nick1, nick2, diff, int)         "317 " + nick1 + " " + nick2 + " " + diff + " " + int + " :seconds idle"
+#define RPL_ENDOFWHOIS(nick1,nick2)                    "318 " + nick1 + " " + nick2 + " :End of /WHOIS list"
+

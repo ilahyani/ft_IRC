@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 18:05:23 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 23:39:24 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:56:07 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ bool isRealnameValid(std::string nick) {
 }
 
 void server::user(std::vector<std::string> params, std::map<int, client>::iterator client) {
-    
     if (params.size() < 5)
     {
         client->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(client->second.getNickname()));

@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/01 23:42:10 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:42:10 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ const std::string& client::getPasswd() {
     return _passwd;
 }
 
+const std::string client::getJoiningTime(){
+    std::stringstream ss;
+    ss << _time;
+    return ss.str();
+}
+
+void client::setJoiningTime(std::time_t t){
+    _time = t;
+}
+
 void client::setNickname(std::string nickname) {
     _nickname = nickname;
 }
@@ -96,7 +106,7 @@ void client::welcome(std::string dateCreated) {
         ServertoClientPrefix(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   
         ServertoClientPrefix(RPL_YOURHOST(getNickname(), getHostIp()));
         ServertoClientPrefix(RPL_CREATED(getNickname(), dateCreated)); 
-        ServertoClientPrefix(RPL_MOTD(getNickname(), "- " + getHostIp() + " Message of the day"));
+        ServertoClientPrefix(RPL_MOTD(getNickname(), "- " + getServerIp() + " Message of the day"));
         ServertoClientPrefix(RPL_MOTD(getNickname(), " ___________  _____  _____ ___________ _   _ "));
         ServertoClientPrefix(RPL_MOTD(getNickname(), "|_   _| ___ \\/  __ \\/  ___|  ___| ___ \\ | | |"));
         ServertoClientPrefix(RPL_MOTD(getNickname(), "  | | | |_/ /| /  \\/\\ `--.| |__ | |_/ / | | |"));

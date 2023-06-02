@@ -6,7 +6,7 @@
 /*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 08:32:30 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/01 23:42:16 by kid-bouh         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:58:23 by kid-bouh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class client {
     std::string _hostip;
     std::string _serverip;
     public:
+        std::time_t _time;
         bool isOpreator;
         bool isInvisible;
         bool isGuest;
@@ -42,11 +43,13 @@ class client {
         const std::string& getServerIp();
         const std::string& getPasswd();
         const std::string& getHostIp();
+        const std::string getJoiningTime();
         void setServerIp(std::string);
         void setNickname(std::string);
         void setRealname(std::string);
         void setUsername(std::string);
         void setHostIp(std::string);
+        void setJoiningTime(std::time_t t);
         void print(std::string str);
         std::string getPrefixClient();
         void ClienttoClientPrefix(std::string str);
