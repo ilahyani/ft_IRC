@@ -1,42 +1,40 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Channels.hpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/16 18:45:26 by ilahyani         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#pragma once
 
 #include "irc.hpp"
 #include "client.hpp"
 
+enum ROLE { OPERATOR, MEMBER };
+
 class Channels
 {
-    std::string             _channelName;
-    std::string             _channelTopic;
-    std::string             _channelKey;
-    std::vector<client>     _channelOperators;
-    std::vector<client>     _channelMembers;
-    client                  _channelOwner;
+    std::string                            _channelName;
+    std::string                            _channelTopic;
+    std::string                            _channelKey;
+    std::vector<std::pair<client, ROLE> >  _Members;
+    std::vector<client>                    _MembersInvite;
+    std::vector<client>                    _MembersBan;
+    int                                    _channelLimit;
     public:
+        bool    isProtected;
+        bool    inviteOnly;
+        bool    topic;
+
         Channels();
-        Channels(std::string name, std::string key, client owner);
-        Channels(std::string name, client owner);
+        Channels(std::string name, std::string key, client& owner);
+        Channels(std::string name, client& owner);
         ~Channels();
-
-        bool                            isProtected;
-
-        const std::string&              getName();
-        void                            setName(std::string name);
-        const std::string&              getKey();
-        void                            setKey(std::string key);
-        const std::string&              geTopic();   
-        void                            setTopic(std::string topic);
-        const std::vector<client>&      getMembers();
-        void                            addMember(client& member, bool makeOperator);
-        void                            removeMember(client& member);
-        // bool                            checkKey(std::string key);
-};
+        const std::string&    getName();
+        const std::string&    getKey();
+        const std::string&    geTopic();
+        const int&            getLimit();
+        std::vector<client>&  getMembersInvite();
+        void                  setName(std::string name);
+        void                  setKey(std::string key);
+        void                  setTopic(std::string topic);
+        void                  setLimit(int);
+        void                  addMember(client& , ROLE);
+        std::vector<std::pair<client, ROLE> >& getMembers();
+        bool                  checkIsInvited(client* c);
+        void                  addToListInvite(client& member);
+        void                  removeMember(client &c);
+};  

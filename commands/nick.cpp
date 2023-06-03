@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   nick.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/27 11:06:09 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/04/27 12:21:36 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 bool isNicknameValid(std::string nick) {
@@ -27,28 +15,39 @@ bool isNicknameValid(std::string nick) {
     return true;
 }
 
-void server::nick(std::vector<std::string> params, std::map<int, client>::iterator client) {
-    if (params.size() == 2 && client->second.getNickname().empty())
-    {
-        if (isNicknameValid(params[1]))
-        {
-            client->second.setNickname(params[1]);
-            std::cout << "The Nickname (" << client->second.getNickname() << ") has been added \n";
-        }
-        else 
-           std::cout << "Invalid characters in nickname, Try Again !"; 
-    }
-    else if (params.size() == 2 && !client->second.getNickname().empty())
-    {
-        std::string old_nick;
+void server::nick(std::vector<std::string> params, std::map<int, client>::iterator cl) {
 
-        old_nick = client->second.getNickname();
-        if (isNicknameValid(params[1]))
-        {
-            client->second.setNickname(params[1]);
-            std::cout << "The Nickname (" << old_nick << ") has been changed to " << client->second.getNickname() << '\n';
-        }
-        else 
-           std::cout << "Invalid characters in nickname, Try Again !"; 
+    if (params.size() != 2)
+    {
+        cl->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(cl->second.getNickname()));
+        return ;
     }
+
+    if (!isNicknameValid(params[1]))
+    {
+        cl->second.ServertoClientPrefix(ERR_ERRONEUSNICKNAME(cl->second.getNickname()));
+        return ;
+    }
+    
+    if (get_client(params[1]))
+    {
+        cl->second.ServertoClientPrefix(ERR_NICKNAMEINUSE(cl->second.getNickname()));
+        return ;
+    }
+
+    std::vector<Channels>::iterator it_chs = getChannels().begin();
+    while (it_chs != getChannels().end())
+    {
+        std::vector<std::pair<client, ROLE> >::iterator it_m = it_chs->getMembers().begin();
+        while (it_m != it_chs->getMembers().end())
+        {
+            if (it_m->first.getsocket() == cl->second.getsocket())
+                it_m->first.setNickname(params[1]);
+            it_m++;
+        }
+        it_chs++;
+    }
+
+    cl->second.setNickname(params[1]);
+    cl->second.welcome(getTimeCreatedServer());
 }

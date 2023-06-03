@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/16 15:24:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/29 13:29:05 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef IRC_HPP
-#define IRC_HPP
+#pragma once
 
 #include <cstring>
 #include <unistd.h>
@@ -37,6 +24,5 @@
 #include <ctype.h>
 #include <vector>
 #include <map>
-#include <cstring>
-
-#endif
+#include <cstddef>
+#include <ifaddrs.h>

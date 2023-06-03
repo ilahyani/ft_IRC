@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bot.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/17 14:15:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/03 10:56:34 by ilahyani         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 std::string getMonthStartDate()
@@ -107,6 +95,8 @@ void server::bot(std::vector<std::string> params, std::map<int, client>::iterato
     std::string date;
     std::string apiToken;
 
+    std::string prefix_bot = ":BOT!BOTIRC"+ _hostAdr + " NOTICE " + client->second.getNickname() + " :";
+    
     if (params.size() > 1)
     {
         std::string login = params[1];
@@ -114,19 +104,19 @@ void server::bot(std::vector<std::string> params, std::map<int, client>::iterato
         apiToken = getAPItoken();
         if (apiToken == "invalid")
         {
-            // client->second.print("Internal error related to the API. Try again later");
+            client->second.print(prefix_bot + "Internal error related to the API. Try again later");
             std::cout << "Failed to generate APIToken, client-secret had expired!\n";
             return;
         }
         logtime = fetchLogtimeData(date, apiToken, login);
         if (logtime.empty())
-            client->second.print("There is no user with login: " + login);
+            client->second.print(prefix_bot + "There is no user with login: " + login);
         else
         {
             std::string response = login + "\'s logtime for this month is: " + calculateLogtime(logtime) + " Hours 🤝";
-            client->second.print(response);
+            client->second.print(prefix_bot + response);
         }
         return;
     }
-    client->second.print("Hmm.. something went wrong, are you sure you entered the right parameters?");
+    client->second.print(prefix_bot + "Hmm.. something went wrong, are you sure you entered the right parameters?");
 }
