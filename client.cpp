@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   client.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 10:11:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/02 15:42:10 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "client.hpp"
 
 client::client() {
@@ -18,6 +6,7 @@ client::client() {
     loggedIn = false;
     isRegistered = false;
     wallops = true;
+    isInvisible = false;
 }
 
 client:: client(int socket) : _socket(socket) {
@@ -26,6 +15,7 @@ client:: client(int socket) : _socket(socket) {
     loggedIn = false;
     isRegistered = false;
     wallops = true;
+    isInvisible = false;
 }
 
 client::~client() {}
@@ -101,6 +91,7 @@ void client::print(std::string str) {
 void client::welcome(std::string dateCreated) {
     if (isGuest && !getNickname().empty() && !getRealname().empty() && !getUsername().empty())
     {
+        std::cout << getNickname() << " is logged in\n";
         isGuest = false;
         isRegistered = true;
         ServertoClientPrefix(RPL_WELCOME(getNickname(), "IRC", getUsername(), getHostIp()));   

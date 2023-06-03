@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/07 14:51:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/02 14:55:49 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #pragma once
 
 #include "irc.hpp"
@@ -66,6 +54,7 @@ class server {
         void send_to_all_in_channel(Channels *ch, client c, std::string cmd);
         void sendToClientById(int receiver, client sender, std::string message);
         std::string getClientsChannel(Channels *ch);
+        std::string getVisibleClients(Channels *ch);
 
         /* COMMANDS */
         void pass(std::vector<std::string> params, std::map<int, client>::iterator client);

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   quit.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/25 19:31:02 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 23:44:35 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 void server::quit(std::vector<std::string> params, std::map<int, client>::iterator cl) {
@@ -37,9 +25,11 @@ void server::quit(std::vector<std::string> params, std::map<int, client>::iterat
     while (it_client != _connectedClients.end())
     {
         if (cl->first == it_client->first)
+        {
             _connectedClients.erase(it_client);
+            break;
+        }
         it_client++;
     }
-
     close(cl->second.getsocket());
 }

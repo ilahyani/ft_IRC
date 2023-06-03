@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   user.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/02 18:05:23 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/02 11:56:07 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 bool isUsernameValid(std::string nick) {
@@ -41,17 +29,26 @@ bool isRealnameValid(std::string nick) {
 }
 
 void server::user(std::vector<std::string> params, std::map<int, client>::iterator client) {
+    
     if (params.size() < 5)
     {
         client->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(client->second.getNickname()));
         return ;
     }
+    
     if (client->second.isRegistered)
     {
         client->second.ServertoClientPrefix(ERR_ALREADYREGISTRED(client->second.getNickname()));
         return ;
     }
+
+    if (params[2] == "2")
+        client->second.isInvisible = true;
+    else if (params[2] == "4")
+        client->second.wallops = true;
+    
     client->second.setUsername(params[1]);
     client->second.setRealname(params[4]);
+
     client->second.welcome(getTimeCreatedServer());
 }

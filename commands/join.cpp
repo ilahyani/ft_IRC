@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   join.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/05 21:08:28 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 23:40:32 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 #include "../client.hpp"
 
@@ -71,7 +59,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
             }
             else if (ch->isProtected && !ch->inviteOnly)
             {
-                if (key != ch->getKey())
+                if (!ch->checkIsInvited(&cl) && key != ch->getKey())
                 {
                     cl.ServertoClientPrefix(ERR_BADCHANNELKEY(cl.getNickname(), ch->getName()));
                     return ;

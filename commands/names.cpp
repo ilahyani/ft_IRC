@@ -1,19 +1,31 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   names.cpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/25 19:31:12 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 23:38:45 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
-void server::names(std::vector<std::string> params, std::map<int, client>::iterator client) {
+std::string server::getVisibleClients(Channels *ch)
+{
+    std::string str;
+    std::vector<std::pair<client, ROLE> >::iterator clients = ch->getMembers().end();
     
+    do
+    {
+        if (ch->getMembers().begin() != clients)
+            clients--;
+        else
+            break;
+
+        if (_connectedClients[clients->first.getsocket()].isInvisible == false)
+        {
+            if (clients->second == OPERATOR)
+                str += ("@" + clients->first.getNickname() + " ");
+            else
+                str += (clients->first.getNickname() + " ");
+        }
+        
+    } while (ch->getMembers().begin() != clients);
+    return str;
+}
+
+void server::names(std::vector<std::string> params, std::map<int, client>::iterator client) {
+
     if (params.size() < 2)
     {
         client->second.ServertoClientPrefix(ERR_NEEDMOREPARAMS(client->second.getNickname()));
@@ -22,9 +34,16 @@ void server::names(std::vector<std::string> params, std::map<int, client>::itera
     Channels *ch = getChannel(params[1]);
     if (!ch)
         return ;
+        
     if (ch && checkUserIsInChannel(client->first, ch))
     {
         client->second.ServertoClientPrefix(RPL_NAMREPLY(client->second.getNickname(), ch->getName(), getClientsChannel(ch)));
+        client->second.ServertoClientPrefix(RPL_ENDOFNAMES(client->second.getNickname(), ch->getName()));
+        return ;
+    }
+    else if (ch && !checkUserIsInChannel(client->first, ch))
+    {
+        client->second.ServertoClientPrefix(RPL_NAMREPLY(client->second.getNickname(), ch->getName(), getVisibleClients(ch)));
         client->second.ServertoClientPrefix(RPL_ENDOFNAMES(client->second.getNickname(), ch->getName()));
         return ;
     }

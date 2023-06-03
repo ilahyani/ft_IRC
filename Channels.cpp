@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Channels.cpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/16 15:25:56 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/30 22:12:23 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Channels.hpp"
 
 Channels::Channels() {}
@@ -80,16 +68,19 @@ std::vector<client>& Channels::getMembersInvite(){
     return _MembersInvite;
 }
 
-client* Channels::checkIsInvited(client* c)
+bool Channels::checkIsInvited(client* c)
 {
     std::vector<client>::iterator it = _MembersInvite.begin();
     while (it != _MembersInvite.end())
     {
         if (it->getsocket() == c->getsocket())
-            return (&*it);
+        {
+            _MembersInvite.erase(it);
+            return true;
+        }
         it++;
     }
-    return (NULL);
+    return false;
 }
 
 void Channels::removeMember(client &c)

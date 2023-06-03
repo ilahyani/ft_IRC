@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Channels.hpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/16 15:23:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/05/29 14:24:23 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #pragma once
 
 #include "irc.hpp"
@@ -46,7 +34,7 @@ class Channels
         void                  setLimit(int);
         void                  addMember(client& , ROLE);
         std::vector<std::pair<client, ROLE> >& getMembers();
-        client*               checkIsInvited(client* c);
+        bool                  checkIsInvited(client* c);
         void                  addToListInvite(client& member);
         void                  removeMember(client &c);
 };  

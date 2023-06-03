@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   server.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 15:10:31 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/02 18:16:35 by ilahyani         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "server.hpp"
 
 void server::_cmdMapinit() {
@@ -84,14 +72,17 @@ bool server::startServ() {
     fd.fd = _listenSocket;
     fd.events = POLLIN;
     _fdsVec.push_back(fd);
-    std::cout << "Starting the IRC Server...\n";
+    std::cout << "Starting the IRC Server, and listening on port: " << _port << "\nEnjoy the trip with us !\n";
     while (true) {
         int rv = poll(&_fdsVec[0], _fdsVec.size(), -1);
         if (rv < 0)
             return std::cerr << "Poll() system call failed\n", false;
 
         if (_fdsVec[0].revents == POLLIN)
+        {
+            std::cout << "New client is connected, Welcome aboard!\n";
             addNewClient();
+        }
         else
             checkConnectedClients();
     }
@@ -101,7 +92,6 @@ bool server::startServ() {
 void server::addNewClient() {
     struct pollfd fd;
     socklen_t addr_len = sizeof(_addr);
-    std::string buff = "Welcome to the server\nPlease Login to the server using the PASS command\n";
 
     _newSocket = accept(_listenSocket, (struct sockaddr *)&_addr, &addr_len);
     if (_newSocket < 0)
@@ -109,8 +99,6 @@ void server::addNewClient() {
         std::cerr << "Failed to accept connection\n";
         return;
     }
-    if (send(_newSocket, buff.c_str(), buff.length(), 0) < 0)
-        throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
     std::string localhostcheck(inet_ntoa(_addr.sin_addr));
     fd.fd = _newSocket;
     fd.events = POLLIN;
@@ -120,7 +108,6 @@ void server::addNewClient() {
     if (localhostcheck == "127.0.0.1")
         localhostcheck = _hostAdr;
     newClient.setHostIp(localhostcheck);
-    
     newClient.setServerIp(_hostAdr);
     newClient.setJoiningTime(std::time(NULL));
     _connectedClients.insert(std::make_pair(_newSocket, newClient));
@@ -240,22 +227,11 @@ void server::respondToClient(std::vector<std::string> cmdVec, std::map<int, clie
                 else if (!cmd_it->first.compare("user"))
                     server::user(cmdVec, client);
             }
-            else
-            {
-                if (send(_newSocket, "Please register to the server using NICK and USER commands\n", 60, 0) < 0)
-                    throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
-            }
         }
     }
     else {
         if (cmd_it != _cmdMap.end() && !cmd_it->first.compare("pass"))
             server::pass(cmdVec, client);
-        else
-        {
-            // std::cout << "Please Login to the server using the PASS command\n";
-            if (send(_newSocket, "Please Login to the server using the PASS command\n", 51, 0) < 0)
-                throw std::runtime_error("An error occurred while attempting to send a message to the client.\n");
-        }
     }
 }
 

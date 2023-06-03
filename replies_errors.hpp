@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   replies_errors.hpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/29 14:37:29 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/02 15:56:20 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #pragma once
 
 #define RPL_WELCOME(nick, network, user, host)  "001 " + nick + " :Welcome to the " + network + " Network, " + nick + "!" + user + "@" + host

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bot.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/17 14:15:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/02 17:50:52 by ilahyani         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 std::string getMonthStartDate()
@@ -101,23 +89,24 @@ std::vector<std::string> fetchLogtimeData(std::string date, std::string API_TOKE
 
 void server::bot(std::vector<std::string> params, std::map<int, client>::iterator client)
 {
-    // (void)client;
     std::vector<std::string> logtime;
     std::string date;
 
+    std::string prefix_bot = ":BOT!BOTIRC"+ _hostAdr + " NOTICE " + client->second.getNickname() + " :";
+    
     if (params.size() > 1)
     {
         std::string login = params[1];
         date = getMonthStartDate();
         logtime = fetchLogtimeData(date, getAPItoken(), login);
         if (logtime.empty())
-            client->second.print("There is no user with login: " + login);
+            client->second.print(prefix_bot + "There is no user with login: " + login);
         else
         {
             std::string response = login + "\' logtime for this month is: " + calculateLogtime(logtime) + " Hours 🤝";
-            client->second.print(response);
+            client->second.print(prefix_bot + response);
         }
         return;
     }
-    client->second.print("Hmm.. something went wrong, are you sure you entered the right parameters?");
+    client->second.print(prefix_bot + "Hmm.. something went wrong, are you sure you entered the right parameters?");
 }

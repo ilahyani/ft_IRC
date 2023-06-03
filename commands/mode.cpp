@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   mode.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kid-bouh <kid-bouh@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/19 20:06:40 by kid-bouh          #+#    #+#             */
-/*   Updated: 2023/06/01 23:40:10 by kid-bouh         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../server.hpp"
 
 std::string parse_modes(std::string _str)
@@ -157,6 +145,11 @@ void server::mode_minus(int &k, std::string &execMode, std::string &modeparams,s
             {
                 client_mode->isInvisible = false;
                 execMode.push_back('i');
+            }
+            else if (modex[i] == 'o')
+            {
+                client_mode->isOpreator = false;
+                execMode.push_back('o');
             }
         }
         else if (modex[i] && ch)
