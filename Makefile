@@ -9,7 +9,6 @@ OBJ = $(SRC:%.cpp=%.o)
 CC = c++
 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98 
-#g -fsanitize=address
 
 NAME = ircserv
 
@@ -17,7 +16,7 @@ HEADER = irc.hpp server.hpp client.hpp Channels.hpp replies_errors.hpp
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HEADER)
+$(NAME): $(OBJ) $(HEADER) 
 	@$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.cpp $(HEADER)

@@ -32,7 +32,7 @@ void server::join_to_channel(std::string channel, std::string key, client &cl)
     {
         if (!checkUserIsInChannel(cl, ch))
         {
-            if ((int)ch->getMembers().size() == ch->getLimit())
+            if (ch->getLimit() <= (int)ch->getMembers().size())
             {
                 cl.ServertoClientPrefix(ERR_CHANNELISFULL(cl.getNickname(), ch->getName()));
                 return ;
