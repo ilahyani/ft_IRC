@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:15:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/06/03 10:56:05 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/06/03 10:56:34 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void server::bot(std::vector<std::string> params, std::map<int, client>::iterato
         if (apiToken == "invalid")
         {
             // client->second.print("Internal error related to the API. Try again later");
-            std::cout << "Failed to generate APIToken, client-secret needs to be updated!\n";
+            std::cout << "Failed to generate APIToken, client-secret had expired!\n";
             return;
         }
         logtime = fetchLogtimeData(date, apiToken, login);
