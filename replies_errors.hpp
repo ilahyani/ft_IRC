@@ -27,9 +27,7 @@
 #define ERR_INVITEONLYCHAN(nick, ch)            "473 " + nick + " " + ch + " :Cannot join channel (+i)"
 #define ERR_BADCHANNELKEY(nick, ch)             "475 " + nick + " " + ch + " :Cannot join channel (+k)"
 #define ERR_CHANOPRIVSNEEDED(nick, ch)          "482 " + nick + " " + ch + " :You're not channel operator"
-
 #define ERR_USERNOTINCHANNEL(nick, nick2, ch)   "441 " + nick + " " + nick2 + " " + ch + " :They aren't on that channel"
-
 #define RPL_INVITING(rec, sen, ch)              "341 " + rec + " " + sen + " " + ch
 #define ERR_NOSUCHSERVER(nick, ser)             "402 " + nick + " " + ser + " :No such server"
 #define ERR_NOORIGIN(nick)                      "409 " + nick + " :No origin specified"
@@ -37,18 +35,12 @@
 #define ERR_NOOPERHOST(nick)                    "491 " + nick + " :No O-lines for your host"
 #define ERR_USERSDONTMATCH(nick)                "502 " + nick + " :Cant change mode for other users"
 #define RPL_UMODEIS(nick, mode)                 "221 " + nick + " " + mode
-
 #define ERR_NOTEXTTOSEND(nick)                  "412 " + nick + " :No text to send"
 #define ERR_NOPRIVILEGES(nick)                  "481 " + nick + " :Permission Denied- You're not an IRC operator"
-
 #define ERR_NONICKNAMEGIVEN(nick)               "431 " + nick + " :No nickname given"
-
-//LIST
 #define RPL_LISTSTART(nick)                     "321 " + nick + " Channel :Users Name"
 #define RPL_LIST(nick, ch, nb, topic)           "322 " + nick + " " + ch + " " + nb + " :" + topic
 #define RPL_LISTEND(nick)                       "323 " + nick + " :End of /LIST"
-
-//WHOIS
 #define RPL_WHOISUSER(nick1,nick2,user,host,realname)  "311 " + nick1 + " " + nick2 + " " + user + " " + host + " * :" + realname
 #define RPL_WHOISCHANNELS(nick1,nick2, channels)       "319 " + nick1 + " " + nick2 + " :" + channels
 #define RPL_WHOISSERVER(nick1, nick2, ser, infos)      "312 " + nick1 + " " + nick2 + " " + ser + " :" + infos
