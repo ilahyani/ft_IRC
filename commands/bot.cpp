@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BOT.cpp                                            :+:      :+:    :+:   */
+/*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:15:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2023/04/19 02:15:44 by ilahyani         ###   ########.fr       */
+/*   Updated: 2023/06/03 10:56:05 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ std::string getAPItoken()
     static std::string apiToken;
     static std::time_t lastGenerated = 0;
     std::string clientUid = "client_id=u-s4t2ud-91439faa9a64d4f05e4e686d7a2fec8f588f4503f200e6aed0ced25247d91991";
-    std::string clientSecret = "client_secret=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";
+    std::string clientSecret = "client_secret=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";
     std::string apiURL = "https://api.intra.42.fr/oauth/token";
     std::string command = "curl -sS -X POST --data \"grant_type=client_credentials&" + clientUid + "&" + clientSecret + "\" " + apiURL;
 
@@ -48,6 +48,8 @@ std::string getAPItoken()
     std::ifstream ifs("/tmp/.token");
     getline(ifs, apiToken, '\0');
     ifs.close();
+    if (apiToken.find("error") != std::string::npos)
+        return (std::string("invalid"));
     trimString(apiToken);
     apiToken = std::strtok(&apiToken[0], ",");
     apiToken = std::strtok(&apiToken[0], ":");
@@ -57,14 +59,18 @@ std::string getAPItoken()
     return apiToken;
 }
 
-int calculateLogtime(std::vector<std::string> logtimeData) {
+std::string calculateLogtime(std::vector<std::string> logtimeData)
+{
     double logtime = 0;
+    std::stringstream ss;
 
-    for (size_t i = 0; i < logtimeData.size(); i++) {
+    for (size_t i = 0; i < logtimeData.size(); i++)
+    {
         logtime += std::atoi(logtimeData[i].substr(0, 2).c_str()) * 60;
         logtime += std::atoi(logtimeData[i].substr(3, logtimeData[i].size()).c_str());
     }
-    return logtime / 60;
+    ss << static_cast<int>(logtime / 60);
+    return ss.str();
 }
 
 std::vector<std::string> fetchLogtimeData(std::string date, std::string API_TOKEN, std::string login)
@@ -84,7 +90,8 @@ std::vector<std::string> fetchLogtimeData(std::string date, std::string API_TOKE
         return logtime;
     trimString(logtimeData);
     token = std::strtok(&logtimeData[0], ",");
-    while (token != NULL) {
+    while (token != NULL)
+    {
         std::string tmp(token);
         size_t startPos = tmp.find_first_of(':') + 2;
         size_t endPos = tmp.find_last_of(':') - (tmp.find_first_of(':') + 2);
@@ -96,19 +103,30 @@ std::vector<std::string> fetchLogtimeData(std::string date, std::string API_TOKE
 
 void server::bot(std::vector<std::string> params, std::map<int, client>::iterator client)
 {
-    (void)client;
     std::vector<std::string> logtime;
     std::string date;
+    std::string apiToken;
 
-    if (params.size() > 1) {
+    if (params.size() > 1)
+    {
         std::string login = params[1];
         date = getMonthStartDate();
-        logtime = fetchLogtimeData(date, getAPItoken(), login);
+        apiToken = getAPItoken();
+        if (apiToken == "invalid")
+        {
+            // client->second.print("Internal error related to the API. Try again later");
+            std::cout << "Failed to generate APIToken, client-secret needs to be updated!\n";
+            return;
+        }
+        logtime = fetchLogtimeData(date, apiToken, login);
         if (logtime.empty())
-            std::cout << "There is no user with login: " << login << "\n";
+            client->second.print("There is no user with login: " + login);
         else
-            std::cout << login << ", your logtime for this month is: " << calculateLogtime(logtime) << std::endl;
-        return ;
+        {
+            std::string response = login + "\'s logtime for this month is: " + calculateLogtime(logtime) + " Hours 🤝";
+            client->second.print(response);
+        }
+        return;
     }
-    std::cerr << "Hmm.. something went wrong, are you sure you entered the right parameters?\n";
+    client->second.print("Hmm.. something went wrong, are you sure you entered the right parameters?");
 }
