@@ -36,6 +36,8 @@ std::string getAPItoken()
     std::ifstream ifs("/tmp/.token");
     getline(ifs, apiToken, '\0');
     ifs.close();
+    if (apiToken.find("error") != std::string::npos)
+        return (std::string("invalid"));
     trimString(apiToken);
     apiToken = std::strtok(&apiToken[0], ",");
     apiToken = std::strtok(&apiToken[0], ":");
@@ -91,6 +93,7 @@ void server::bot(std::vector<std::string> params, std::map<int, client>::iterato
 {
     std::vector<std::string> logtime;
     std::string date;
+    std::string apiToken;
 
     std::string prefix_bot = ":BOT!BOTIRC"+ _hostAdr + " NOTICE " + client->second.getNickname() + " :";
     
@@ -98,12 +101,19 @@ void server::bot(std::vector<std::string> params, std::map<int, client>::iterato
     {
         std::string login = params[1];
         date = getMonthStartDate();
-        logtime = fetchLogtimeData(date, getAPItoken(), login);
+        apiToken = getAPItoken();
+        if (apiToken == "invalid")
+        {
+            client->second.print(prefix_bot + "Internal error related to the API. Try again later");
+            std::cout << "Failed to generate APIToken, client-secret had expired!\n";
+            return;
+        }
+        logtime = fetchLogtimeData(date, apiToken, login);
         if (logtime.empty())
             client->second.print(prefix_bot + "There is no user with login: " + login);
         else
         {
-            std::string response = login + "\' logtime for this month is: " + calculateLogtime(logtime) + " Hours 🤝";
+            std::string response = login + "\'s logtime for this month is: " + calculateLogtime(logtime) + " Hours 🤝";
             client->second.print(prefix_bot + response);
         }
         return;
